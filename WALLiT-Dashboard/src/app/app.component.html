@@ -1,0 +1,99 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#"><img src="../assets/Logo_blue.png"></a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="#" style="margin-left: 20px; margin-right: 20px">Home</a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="#" style="margin-left: 20px; margin-right: 20px">Our Fund<span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#" style="margin-left: 20px; margin-right: 20px">My personal space</a>
+      </li>      
+    </ul>
+    <form class="form-inline my-2 my-lg-0">
+      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+      <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">Search</button>
+    </form>
+    <ul class="navbar-nav mr-1">
+      <span class="navbar-text" style="margin-left: 20px">
+        John Doe
+      </span>
+      <span class="navbar-text" style="margin-left: 20px; margin-right: 20px">|</span>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Logout</a>
+      </li>      
+    </ul>
+  </div>
+</nav>
+
+<div>
+  <span><h2 style="text-align: center; color: #6699CC; margin-top: 20px; margin-bottom: 20px">
+    The Fund Evolution</h2>
+  </span>
+</div>
+
+<div>
+  <span><h5 style="text-align: center; color: #676767; margin-bottom: 20px">
+    Follow up our fund in real-time</h5>
+  </span>
+</div>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-10">
+      <div style="display: block">
+        <canvas id="chart" height="120"></canvas>
+      </div>
+    </div>
+
+    <div class="col col-lg-2">
+      <div class="card">
+        <div class="card-body">
+          <h6 class="card-subtitle mb-2 text-muted">Date scale</h6>
+          <div>
+            <a href="#" class="btn btn-outline-secondary btn-sm btn-block" (click)="updateTimeScale('5 years')">5 years</a>
+            <a href="#" class="btn btn-outline-secondary btn-sm btn-block" (click)="updateTimeScale('1 year')">1 year</a>
+            <a href="#" class="btn btn-outline-secondary btn-sm btn-block" (click)="updateTimeScale('6 months')">6 months</a>
+            <a href="#" class="btn btn-outline-secondary btn-sm btn-block active" style="background-color: #6699CC; border-color: #6699CC" (click)="updateTimeScale('3 months')">3 months</a>
+            <a href="#" class="btn btn-outline-secondary btn-sm btn-block" (click)="updateTimeScale('1 month')">1 month</a>
+          
+            <div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+              <label class="btn btn-outline-secondary btn-sm active" style="background-color: #6699CC; border-color: #6699CC">
+                <input type="radio" name="options" id="option1" autocomplete="off" checked>%
+              </label>
+              <label class="btn btn-outline-secondary btn-sm">
+                <input type="radio" name="options" id="option2" autocomplete="off">€
+              </label>
+            </div>
+          </div>
+
+          <h6 class="mb-2 text-muted" style="margin-top: 20px">Current status</h6>
+
+          <div class="row">
+            <div class="col">Value:</div>
+            <div class="col" style="text-align: right">107,56</div>
+          </div>
+          <div class="row">
+            <div class="col">&alpha;-level:</div>
+            <div class="col" style="text-align: right; color: green">+7,24%</div>
+          </div>
+          <div class="row" style="padding-top: 10px"></div>
+          <div class="row">
+            <div class="col-5">Wallit:</div>
+            <div class="col-7" style="text-align: right; color: red">1.203,64€</div>
+          </div>
+          <div class="row">
+            <div class="col">&alpha;-Wallit:</div>
+            <div class="col" style="text-align: right; color: red">-1,54%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+</div>
