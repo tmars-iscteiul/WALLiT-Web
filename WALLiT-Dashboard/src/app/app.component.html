@@ -47,7 +47,7 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-10">
-      <div style="display: block">
+      <div class="chartBox" style="display: block">
         <canvas id="chart" height="120"></canvas>
       </div>
     </div>
@@ -57,19 +57,15 @@
         <div class="card-body">
           <h6 class="card-subtitle mb-2 text-muted">Date scale</h6>
           <div>
-            <a href="#" class="btn btn-outline-secondary btn-sm btn-block" (click)="updateTimeScale('5 years')">5 years</a>
-            <a href="#" class="btn btn-outline-secondary btn-sm btn-block" (click)="updateTimeScale('1 year')">1 year</a>
-            <a href="#" class="btn btn-outline-secondary btn-sm btn-block" (click)="updateTimeScale('6 months')">6 months</a>
-            <a href="#" class="btn btn-outline-secondary btn-sm btn-block active" style="background-color: #6699CC; border-color: #6699CC" (click)="updateTimeScale('3 months')">3 months</a>
-            <a href="#" class="btn btn-outline-secondary btn-sm btn-block" (click)="updateTimeScale('1 month')">1 month</a>
-          
-            <div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
-              <label class="btn btn-outline-secondary btn-sm active" style="background-color: #6699CC; border-color: #6699CC">
-                <input type="radio" name="options" id="option1" autocomplete="off" checked>%
-              </label>
-              <label class="btn btn-outline-secondary btn-sm">
-                <input type="radio" name="options" id="option2" autocomplete="off">€
-              </label>
+            <a id="fiveYears" href="#" class="btn btn-outline-secondary btn-sm btn-block" (click)="updateTimeScale('fiveYears')">5 years</a>
+            <a id="oneYear"  href="#" class="btn btn-outline-secondary btn-sm btn-block" (click)="updateTimeScale('oneYear')">1 year</a>
+            <a id="sixMonths"  href="#" class="btn btn-outline-secondary btn-sm btn-block" (click)="updateTimeScale('sixMonths')">6 months</a>
+            <a id="threeMonths"  href="#" class="btn btn-outline-secondary btn-sm btn-block" (click)="updateTimeScale('threeMonths')">3 months</a>
+            <a id="oneMonth"  href="#" class="btn btn-outline-secondary btn-sm btn-block" (click)="updateTimeScale('oneMonth')">1 month</a>
+
+            <div class="btn-group btn-group-sm btn-block" role="group" aria-label="Basic example">
+              <button id="percentage" type="button" class="btn btn-outline-secondary btn-sm" (click)="updateChartType('percentage')">%</button>
+              <button id="euro" type="button" class="btn btn-outline-secondary btn-sm" (click)="updateChartType('euro')">€</button>
             </div>
           </div>
 
