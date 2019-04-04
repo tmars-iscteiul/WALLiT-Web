@@ -12,48 +12,77 @@ import * as $ from 'jquery';
 export class AppComponent implements OnInit {
   title = 'WALLiT-Dashboard';
   chart = null;
+  type = "percentage";
+  scale = "threeMonths"
 
   ngOnInit() {
-	document.getElementById("threeMonths").classList.add("btn-active");
-  	document.getElementById("percentage").classList.add("btn-active");
+	document.getElementById(this.scale).classList.add("btn-active");
+  	document.getElementById(this.type).classList.add("btn-active");
 
-	this.updateChartData("threeMonths");
+	this.updateChartData(this.scale);
   }
 
-  updateTimeScale(code) {
+  updateTimeScale(scale) {
   	document.getElementById("fiveYears").classList.remove("btn-active");
   	document.getElementById("oneYear").classList.remove("btn-active");
   	document.getElementById("sixMonths").classList.remove("btn-active");
   	document.getElementById("threeMonths").classList.remove("btn-active");
   	document.getElementById("oneMonth").classList.remove("btn-active");
+  	document.getElementById("fiveYears").classList.remove("btn-euro-active");
+  	document.getElementById("oneYear").classList.remove("btn-euro-active");
+  	document.getElementById("sixMonths").classList.remove("btn-euro-active");
+  	document.getElementById("threeMonths").classList.remove("btn-euro-active");
+  	document.getElementById("oneMonth").classList.remove("btn-euro-active");
   	
-  	document.getElementById(code).classList.add("btn-active");
+  	if (this.type == "euro") {
+  		document.getElementById(scale).classList.add("btn-euro-active");
+  	} else {
+  		document.getElementById(scale).classList.add("btn-active");
+  	}
 
-  	this.updateChartData(code);
+  	this.updateChartData(scale);
   }
 
-  updateChartType(code) {
+  updateChartType(type) {
   	document.getElementById("percentage").classList.remove("btn-active");
-  	document.getElementById("euro").classList.remove("btn-active");
+  	document.getElementById("euro").classList.remove("btn-euro-active");
 
-  	document.getElementById(code).classList.add("btn-active");
+  	if (type == "euro") {
+  		document.getElementById(type).classList.add("btn-euro-active");
+  	} else {
+  		document.getElementById(type).classList.add("btn-active");
+  	}
+
+  	if (type != this.type) {
+  		this.type = type;
+  		this.updateTimeScale(this.scale);
+  	}  	
   }
   
   constructor() {
   } 
 
-  updateChartData(code) {
+  updateChartData(scale) {
+  	var path = null;
+  	this.scale = scale;
+  	var type = this.type;
+
   	$("canvas").remove();
 	$(".chartBox").append('<canvas id="chart" height="120"></canvas>');
 
-	$.getJSON("../assets/dataTest.json", function (data) {
+	if (type == "percentage") {
+		path = "../assets/dataTestPercentage.json"
+	} else {
+		path = "../assets/dataTestEuro.json"
+	}
+
+	$.getJSON(path, function (data) {
   		var labelsJSON = [];
   		var valuesJSON = [];
-  		var scale = 'week';
 
-	    if (data.hasOwnProperty(code)) {
-    		labelsJSON = Object.keys(data[code]);
-    		valuesJSON = Object.values(data[code]);
+	    if (data.hasOwnProperty(scale)) {
+    		labelsJSON = Object.keys(data[scale]);
+    		valuesJSON = Object.values(data[scale]);
 	    }
 	
 	    var canvas = <HTMLCanvasElement> document.getElementById("chart");
@@ -133,13 +162,40 @@ export class AppComponent implements OnInit {
 	        }
 		});
 
-		if (code == "fiveYears") {
+		if (scale == "fiveYears") {
 	    	this.chart.options.scales.xAxes[0].time.unit='month';
-   			this.chart.update();
-	    } else if (code == "oneMonth") {
+
+	    } else if (scale == "oneMonth") {
 	    	this.chart.options.scales.xAxes[0].time.unit='day';
-   			this.chart.update();
+
 	    }
+
+	    if (type == "euro") {
+	    	this.chart.data.datasets[0] = {
+    		    label: 'Fund total value',
+	            data: valuesJSON,
+	            borderWidth: 1,
+	            backgroundColor: '#E9F0C3',
+		        borderColor: '#A7B846',
+		        pointBackgroundColor: '#687328',
+		        pointBorderColor: '#FFF',
+		        pointHoverBackgroundColor: '#FFF',
+		        pointHoverBorderColor: '#BDBDBD'
+	    	}
+	    	this.chart.options.scales.yAxes[0] = {
+		        id: 'y-axis-0',
+			          position: 'left',
+			          gridLines: {
+			            color: '#FFF',
+			    },
+		        ticks: {
+		            min: 0,
+		            max: 250000
+			    }
+		    };
+	    }
+
+	    this.chart.update();
     });
   }
 }
