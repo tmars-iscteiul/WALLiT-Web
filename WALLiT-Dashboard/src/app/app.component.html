@@ -26,70 +26,10 @@
       </span>
       <span class="navbar-text" style="margin-left: 20px; margin-right: 20px">|</span>
       <li class="nav-item">
-        <a class="nav-link" href="#">Logout</a>
+        <a class="nav-link" href="#" routerLink="/login">Logout</a>
       </li>      
     </ul>
   </div>
 </nav>
 
-<div>
-  <span><h2 style="text-align: center; color: #6699CC; margin-top: 20px; margin-bottom: 20px">
-    The Fund Evolution</h2>
-  </span>
-</div>
-
-<div>
-  <span><h5 style="text-align: center; color: #676767; margin-bottom: 20px">
-    Follow up our fund in real-time</h5>
-  </span>
-</div>
-
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-10">
-      <div class="chartBox" style="display: block">
-        <canvas id="chart" height="120"></canvas>
-      </div>
-    </div>
-
-    <div class="col col-lg-2">
-      <div class="card">
-        <div class="card-body">
-          <h6 class="card-subtitle mb-2 text-muted">Date scale</h6>
-          <div>
-            <a id="fiveYears" href="#" class="btn btn-outline-secondary btn-sm btn-block" (click)="updateTimeScale('fiveYears')">5 years</a>
-            <a id="oneYear"  href="#" class="btn btn-outline-secondary btn-sm btn-block" (click)="updateTimeScale('oneYear')">1 year</a>
-            <a id="sixMonths"  href="#" class="btn btn-outline-secondary btn-sm btn-block" (click)="updateTimeScale('sixMonths')">6 months</a>
-            <a id="threeMonths"  href="#" class="btn btn-outline-secondary btn-sm btn-block" (click)="updateTimeScale('threeMonths')">3 months</a>
-            <a id="oneMonth"  href="#" class="btn btn-outline-secondary btn-sm btn-block" (click)="updateTimeScale('oneMonth')">1 month</a>
-
-            <div class="btn-group btn-group-sm btn-block" role="group" aria-label="Basic example">
-              <button id="percentage" type="button" class="btn btn-outline-secondary btn-sm" (click)="updateChartType('percentage')">%</button>
-              <button id="euro" type="button" class="btn btn-outline-secondary btn-sm" (click)="updateChartType('euro')">€</button>
-            </div>
-          </div>
-
-          <h6 class="mb-2 text-muted" style="margin-top: 20px">Current status</h6>
-
-          <div class="row">
-            <div class="col">Value:</div>
-            <div class="col" style="text-align: right">107,56</div>
-          </div>
-          <div class="row">
-            <div class="col">&alpha;-level:</div>
-            <div class="col" style="text-align: right; color: green">+7,24%</div>
-          </div>
-          <div class="row" style="padding-top: 10px"></div>
-          <div class="row">
-            <div class="col-5">Wallit:</div>
-            <div class="col-7" style="text-align: right; color: red">1.203,64€</div>
-          </div>
-          <div class="row">
-            <div class="col">&alpha;-Wallit:</div>
-            <div class="col" style="text-align: right; color: red">-1,54%</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  
-</div>
+<router-outlet></router-outlet>
