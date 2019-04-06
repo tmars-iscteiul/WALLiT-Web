@@ -1,4 +1,4 @@
-<div style="height: 100px"></div>
+<div style="height: 150px"></div>
 
 <div class="container-fluid">
   <div class="row justify-content-center">
@@ -8,9 +8,9 @@
 		<div class="card-header">Login Page</div>
 		<div class="card-body">
 			<h5 class="card-title">Welcome to your personal area</h5>
-			<input class="form-control form-control-lg" style="text-align: center; margin-bottom: 10px" type="text" placeholder="Username">
-			<input class="form-control form-control-lg" style="text-align: center; margin-bottom: 10px" type="password" placeholder="Password">
-			<a id="login" href="#" class="btn btn-outline-secondary btn-sm btn-block" (click)="updateTimeScale('fiveYears')" routerLink="/dashboard">Continue</a>
+			<input id="user" class="form-control form-control-md" style="text-align: center; margin-top: 20px; margin-bottom: 10px" type="text" placeholder="Username" required="true">
+			<input id="pass" class="form-control form-control-md" style="text-align: center; margin-bottom: 10px" type="password" placeholder="Password" required="true">
+			<button id="login" class="btn btn-outline-secondary btn-block" (click)="checkLogin()">Continue</button>
 		</div>
 	  </div>
     </div>

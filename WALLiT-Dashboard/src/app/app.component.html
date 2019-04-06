@@ -15,18 +15,15 @@
       <li class="nav-item">
         <a class="nav-link" href="#" style="margin-left: 20px; margin-right: 20px">My personal space</a>
       </li>      
-    </ul>
+    </ul><span id="username" class="navbar-text" style="margin-left: 20px; margin-right: 40px"></span>
     <form class="form-inline my-2 my-lg-0">
       <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
       <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">Search</button>
     </form>
     <ul class="navbar-nav mr-1">
-      <span class="navbar-text" style="margin-left: 20px">
-        John Doe
-      </span>
-      <span class="navbar-text" style="margin-left: 20px; margin-right: 20px">|</span>
+      
       <li class="nav-item">
-        <a class="nav-link" href="#" routerLink="/login">Logout</a>
+        <a id="login" class="nav-link" href="#" (click)="doLogout()" routerLink="/login" style="margin-left: 20px">Login</a>
       </li>      
     </ul>
   </div>
