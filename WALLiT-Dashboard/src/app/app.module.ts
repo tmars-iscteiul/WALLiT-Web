@@ -8,10 +8,14 @@ import { AppComponent } from './app.component';
 import { ChartsModule } from 'ng2-charts';
 import { LoginPageComponent } from './login-page/login-page.component';
 import { FundDashboardPageComponent } from './fund-dashboard-page/fund-dashboard-page.component';
+import { HomePageComponent } from './home-page/home-page.component';
+import { PersonalPageComponent } from './personal-page/personal-page.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  { path: '', redirectTo: '/home', pathMatch: 'full' },
+  { path: 'home', component: HomePageComponent },
   { path: 'login', component: LoginPageComponent },
+  { path: 'personal', component: PersonalPageComponent },
   { path: 'dashboard', component: FundDashboardPageComponent }
 ];
 
@@ -19,7 +23,9 @@ const routes: Routes = [
   declarations: [
     AppComponent,
     LoginPageComponent,
-    FundDashboardPageComponent
+    FundDashboardPageComponent,
+    HomePageComponent,
+    PersonalPageComponent
   ],
   imports: [
     BrowserModule,

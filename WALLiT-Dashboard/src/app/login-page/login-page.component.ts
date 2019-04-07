@@ -21,10 +21,10 @@ export class LoginPageComponent implements OnInit {
   checkLogin() {
   	if ((<HTMLInputElement>document.getElementById("user")).value == this.user 
   		&& (<HTMLInputElement>document.getElementById("pass")).value == this.pass) {
-  		this.router.navigateByUrl("/dashboard");
+  		this.router.navigateByUrl("/personal");
   		this.data.changeMessage(this.user);
   	} else {
-		alert("Sorry! The credentials are incorrect.");
+		  alert("Sorry! The credentials are incorrect.");
   	}  	
   }
 

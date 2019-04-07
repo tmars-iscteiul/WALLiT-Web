@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Chart } from 'chart.js';
 import { Color, BaseChartDirective, Label } from 'ng2-charts';
+import { DataService } from "../data.service";
 import * as $ from 'jquery';
 
 @Component({
@@ -12,9 +13,17 @@ export class FundDashboardPageComponent implements OnInit {
   title = 'WALLiT-Dashboard';
   chart = null;
   type = "percentage";
-  scale = "threeMonths"
+  scale = "threeMonths";
+  message:string;
 
   ngOnInit() {
+  	this.data.currentMessage.subscribe(message => {
+  		if (message == "") {
+  			document.getElementById("value").innerHTML = "";
+  			document.getElementById("alpha").innerHTML = "";
+  		}
+  	});
+
 	document.getElementById(this.scale).classList.add("btn-active");
   	document.getElementById(this.type).classList.add("btn-active");
 
@@ -58,7 +67,7 @@ export class FundDashboardPageComponent implements OnInit {
   	}  	
   }
   
-  constructor() {
+  constructor(private data: DataService) {
   } 
 
   updateChartData(scale) {

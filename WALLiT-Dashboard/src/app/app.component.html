@@ -6,14 +6,14 @@
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
-      <li class="nav-item">
-        <a class="nav-link" href="#" style="margin-left: 20px; margin-right: 20px">Home</a>
+      <li id="home" class="nav-item active">
+        <a class="nav-link" (click)="goTo('home')" routerLink="/home" style="margin-left: 20px; margin-right: 20px">Home</a>
       </li>
-      <li class="nav-item active">
-        <a class="nav-link" href="#" style="margin-left: 20px; margin-right: 20px">Our Fund<span class="sr-only">(current)</span></a>
+      <li id="dashboard" class="nav-item">
+        <a class="nav-link" (click)="goTo('dashboard')" routerLink="/dashboard" style="margin-left: 20px; margin-right: 20px">Our Fund</a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#" style="margin-left: 20px; margin-right: 20px">My personal space</a>
+      <li id="personal" class="nav-item">
+        <a class="nav-link" (click)="goTo('personal')" routerLink="/personal" style="margin-left: 20px; margin-right: 20px">My personal space</a>
       </li>      
     </ul><span id="username" class="navbar-text" style="margin-left: 20px; margin-right: 40px"></span>
     <form class="form-inline my-2 my-lg-0">
@@ -23,7 +23,7 @@
     <ul class="navbar-nav mr-1">
       
       <li class="nav-item">
-        <a id="login" class="nav-link" href="#" (click)="doLogout()" routerLink="/login" style="margin-left: 20px">Login</a>
+        <a id="login" class="nav-link" (click)="doLogout()" routerLink="/login" style="margin-left: 20px">Login</a>
       </li>      
     </ul>
   </div>
