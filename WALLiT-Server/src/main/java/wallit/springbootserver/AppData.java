@@ -1,4 +1,4 @@
-package wallit.server.WALLiT_Server;
+package wallit.springbootserver;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

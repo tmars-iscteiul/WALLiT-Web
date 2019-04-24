@@ -1,4 +1,4 @@
-package wallit.server.WALLiT_Server;
+package wallit.springbootserver;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;

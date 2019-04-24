@@ -1,4 +1,4 @@
-package wallit.server.WALLiT_Server;
+package wallit.springbootserver;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
