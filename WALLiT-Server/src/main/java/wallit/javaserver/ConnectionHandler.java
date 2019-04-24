@@ -20,9 +20,10 @@ public class ConnectionHandler extends Thread {
 	public ConnectionHandler(Socket s, int id)	{
 		try {
 			handlerID = id;
-			consolePrint("Handler online.");
+			clientSocket = s;
 			objectIn = new ObjectInputStream(clientSocket.getInputStream());
 			objectOut = new ObjectOutputStream(clientSocket.getOutputStream());
+			consolePrint("Handler online.");
 			run();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -36,7 +37,9 @@ public class ConnectionHandler extends Thread {
 			String receivedData = (String)objectIn.readObject();
 			consolePrint("Received data from user. It reads: ");
 			System.out.println(receivedData);
-			consolePrint("Ending user data print.");
+			consolePrint("Sending ack to client");
+			objectOut.writeObject("Message received: " + receivedData);
+            objectOut.reset();
 		} catch (IOException | ClassNotFoundException e) {
 			consolePrint("Problem with receiving client's data.");
 		}

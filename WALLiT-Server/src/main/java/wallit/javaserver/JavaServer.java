@@ -22,7 +22,7 @@ public class JavaServer extends Thread	{
 	public JavaServer()	{
 		try {
 			serverSocket = new ServerSocket(port);
-			System.out.println("[JavaServer] Server launched on port " + port);
+			System.out.println("[JavaServer] Server launched on " + port);
 			running = true;
 			connectedClients = new ArrayList<ConnectionHandler>();
 		} catch (IOException e) {
