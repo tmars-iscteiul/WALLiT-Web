@@ -19,8 +19,8 @@ export class FundDashboardPageComponent implements OnInit {
   ngOnInit() {
   	this.data.currentMessage.subscribe(message => {
   		if (message == "") {
-  			document.getElementById("value").innerHTML = "";
-  			document.getElementById("alpha").innerHTML = "";
+  			document.getElementById("value").innerHTML = "(n/a)";
+  			document.getElementById("alpha").innerHTML = "(n/a)";
   		}
   	});
 
@@ -162,8 +162,10 @@ export class FundDashboardPageComponent implements OnInit {
 		                    if (label) {
 		                        label += ': ';
 		                    }
-		                    label += '' + tooltipItem.yLabel;
-		                    return label.substring(0,19);
+
+		                    var num = Math.round(tooltipItem.yLabel*100)/100;
+		                    label += '' + num.toString();
+		                    return label;
 	                	}
 	            	}
 	        	}
