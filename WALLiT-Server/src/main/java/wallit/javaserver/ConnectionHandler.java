@@ -28,22 +28,22 @@ public class ConnectionHandler extends Thread {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		// Stablish the connection. Run the thread.
 	}
 	
 	public void run()	{
 		// Wait for client requests and direct them to the main processing thread
-		try {
-			String receivedData = (String)objectIn.readObject();
-			consolePrint("Received data from user. It reads: ");
-			System.out.println(receivedData);
-			consolePrint("Sending ack to client");
-			objectOut.writeObject("Message received: " + receivedData);
-            objectOut.reset();
-		} catch (IOException | ClassNotFoundException e) {
-			consolePrint("Problem with receiving client's data.");
+		while(true)	{
+			try {
+				String receivedData = (String)objectIn.readObject();
+				consolePrint("Received data from user. It reads: ");
+				System.out.println(receivedData);
+				consolePrint("Sending ack to client");
+				objectOut.writeObject("Message received: " + receivedData);
+	            objectOut.reset();
+			} catch (IOException | ClassNotFoundException e) {
+				consolePrint("Problem with receiving client's data.");
+			}
 		}
-
 	}
 	
 	public ObjectOutputStream getObjectOut()	{
