@@ -40,7 +40,7 @@ public class JavaServer extends Thread	{
 				Socket clientSocket = serverSocket.accept();	// Locked until a new client attempts to connect
 				System.out.println("[JavaServer] Connection accepted: " + clientSocket.getInetAddress() + ":" + clientSocket.getPort());
 				connectedClients.add(new ConnectionHandler(clientSocket, connectedClients.size()));
-				
+				connectedClients.get(connectedClients.size()-1).start();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
