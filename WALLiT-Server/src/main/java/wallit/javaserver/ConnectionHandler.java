@@ -27,10 +27,24 @@ public class ConnectionHandler extends Thread {
 			objectIn = new ObjectInputStream(clientSocket.getInputStream());
 			objectOut = new ObjectOutputStream(clientSocket.getOutputStream());
 			consolePrint("Handler online.");
-		} catch (IOException e) {
+			String receivedData = (String)objectIn.readObject();
+			consolePrint("Received login from user: " + receivedData);
+			consolePrint("Sending ack to client");
+			try {
+				// Simulating delay on connection
+				sleep(2000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			objectOut.writeObject("POSITIVE_LOGIN_ACK");
+            objectOut.reset();
+            consolePrint("Client authenticated.");
+		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 	}
+	
+	// TODO Add connection timeout (closes the socket, informing the client (somehow) that the connection has timed out).
 	
 	public void run()	{
 		while(online)	{
@@ -39,6 +53,12 @@ public class ConnectionHandler extends Thread {
 				consolePrint("Received data from user. It reads: ");
 				System.out.println(receivedData);
 				consolePrint("Sending ack to client");
+				try {
+					// Simulating delay on connection
+					sleep(2000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 				objectOut.writeObject("Ack: " + receivedData);
 	            objectOut.reset();
 			} catch (IOException | ClassNotFoundException e) {
