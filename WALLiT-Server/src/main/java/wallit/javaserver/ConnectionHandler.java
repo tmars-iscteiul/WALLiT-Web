@@ -5,6 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.Random;
 
 
 /**
@@ -38,7 +39,7 @@ public class ConnectionHandler extends Thread {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			objectOut.writeObject("POSITIVE_LOGIN_ACK");
+			objectOut.writeObject("MSG_ACK_POSITIVE");
             objectOut.reset();
             consolePrint("Client authenticated.");
 		} catch (IOException | ClassNotFoundException e) {
@@ -61,7 +62,12 @@ public class ConnectionHandler extends Thread {
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-				objectOut.writeObject("Ack: " + receivedData);
+				// Sends random acks (positive or negative) for now. TODO Change this (ofc)
+				if(new Random().nextBoolean())	{
+					objectOut.writeObject("MSG_ACK_POSITIVE");
+				}	else	{
+					objectOut.writeObject("MSG_ACK_NEGATIVE");
+				}
 	            objectOut.reset();
 			} catch (IOException | ClassNotFoundException e) {
 				consolePrint("Problem communicating with client, terminating the connection.");
