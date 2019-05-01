@@ -19,6 +19,8 @@ public class ConnectionHandler extends Thread {
 	private boolean online;
 	private int handlerID;
 	
+	
+	// TODO Add major command handling to this server
 	public ConnectionHandler(Socket s, int id)	{
 		try {
 			online = true;
