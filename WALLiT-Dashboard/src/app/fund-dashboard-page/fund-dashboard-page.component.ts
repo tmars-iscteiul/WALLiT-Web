@@ -163,7 +163,7 @@ export class FundDashboardPageComponent implements OnInit {
 		                        label += ': ';
 		                    }
 
-		                    var num = Math.round(tooltipItem.yLabel*100)/100;
+		                    var num = Math.round(Number(tooltipItem.yLabel)*100)/100;
 		                    label += '' + num.toString();
 		                    return label;
 	                	}
