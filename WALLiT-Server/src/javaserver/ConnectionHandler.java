@@ -1,4 +1,4 @@
-package wallit.javaserver;
+package javaserver;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -21,7 +21,7 @@ public class ConnectionHandler extends Thread {
 	private int handlerID;
 	
 	
-	// TODO Add major command handling to this server
+	// TODO Add major command handling to this handler
 	public ConnectionHandler(Socket s, int id)	{
 		try {
 			online = true;
@@ -48,7 +48,6 @@ public class ConnectionHandler extends Thread {
 	}
 	
 	// TODO Add connection timeout (closes the socket, informing the client (somehow) that the connection has timed out).
-	
 	public void run()	{
 		while(online)	{
 			try {
