@@ -29,6 +29,8 @@ export class AppComponent implements OnInit {
     document.getElementById("home").classList.remove("active");
     document.getElementById("dashboard").classList.remove("active");
     document.getElementById("personal").classList.remove("active");
+    document.getElementById("about").classList.remove("active");
+    document.getElementById("personal").classList.remove("active");
     document.getElementById(page).classList.add("active");
 
     if (page == "personal" && document.getElementById("login").innerHTML == "Login") {

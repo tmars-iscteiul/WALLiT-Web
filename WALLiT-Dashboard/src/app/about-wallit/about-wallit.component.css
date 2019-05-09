@@ -1,0 +1,46 @@
+.background-image {
+	max-width: 100%;
+	height: 400px;
+	background-image: url('assets/fundo2.jpg');
+	background-size: cover;
+}
+
+.background-vision {
+	max-width: 100%;
+	background-image: url('assets/vision.jpg');
+	background-size: cover;
+}
+
+.background-mission {
+	max-width: 100%;
+	background-image: url('assets/mission.jpg');
+	background-size: cover;
+}
+
+.anime {
+  transition: all 0.3s;
+}
+
+.div_anime:hover .anime:hover {
+  transform: scale(1.1);
+  
+}
+
+.div_anime {
+
+}
+
+.value_text {
+  position: relative;
+  color: #676767;
+  visibility: hidden;
+  opacity: 0;
+
+  /* transition effect. not necessary */
+  transition: opacity .2s, visibility .2s;
+}
+
+.div_anime:hover .value_text {
+  visibility: visible;
+  opacity: 1;
+}

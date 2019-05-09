@@ -1,0 +1,32 @@
+#movementsTable {
+  border-collapse: collapse;
+  width: 100%;
+
+}
+
+#movementsTable th, #movementsTable td {
+  text-align: center;
+  padding: 6px;
+}
+
+#movementsTable tr {
+  border-bottom: 1px solid #ddd; 
+}
+
+#movementsTable tr.header {
+  background-color: #EBEDF3;
+} 
+
+#movementsTable tr:hover {
+  background-color: #EBEDF3;
+}
+
+.btn-active {
+  background-color: #003B6D;
+  border-color: #003B6D;
+  color: #FFF;
+}
+
+input[readonly] {
+  background-color: white;
+}
