@@ -113,8 +113,8 @@ public class ConnectionHandler extends Thread {
 				aux = new MovementEntryChunk();
 				aux.addMovementEntry(new MovementEntry(args));
 			}
-			res.add(aux);
 		}
+		res.add(aux);
 		s.close();
 		return res;
 	}
