@@ -29,8 +29,6 @@ public class ConnectionHandler extends Thread {
 	private int handlerID;
 	public static final String USER_MOVEMENTS = "./userMovements/";
 	
-	
-	// TODO Add major command handling to this handler
 	public ConnectionHandler(Socket s, int id)	{
 		try {
 			online = true;
@@ -72,7 +70,6 @@ public class ConnectionHandler extends Thread {
 	 * Arg2: USERNAME
 	 * Arg3: EXTRA DATA
 	 */
-	// TODO Create a standardized ACK data class (both in this server and android client)
 	private void handleUserRequest(String receivedArgs[]) throws IOException	{
 		AckMessage messageToSend = null;
 		switch(receivedArgs[0])	{
@@ -110,14 +107,14 @@ public class ConnectionHandler extends Thread {
 			String[] args = nextLine.split(",");
 			
 			// If list is full
-			if(aux.addMovementEntry(new MovementEntry(args))) {
+			if(!aux.addMovementEntry(new MovementEntry(args))) {
 				// Add full chunk to the main list, create a new chunk and add the last entry to the new chunk
 				res.add(aux);
 				aux = new MovementEntryChunk();
 				aux.addMovementEntry(new MovementEntry(args));
 			}
+			res.add(aux);
 		}
-		res.add(aux);
 		s.close();
 		return res;
 	}
