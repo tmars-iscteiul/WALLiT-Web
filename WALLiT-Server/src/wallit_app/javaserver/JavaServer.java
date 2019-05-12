@@ -1,4 +1,4 @@
-package javaserver;
+package wallit_app.javaserver;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 import org.springframework.stereotype.Service;
 
-import main.Main;
+import wallit_app.main.Main;
 
 
 /**
@@ -31,6 +31,7 @@ public class JavaServer extends Thread	{
 			System.out.println("[JavaServer] Server launched on " + InetAddress.getLocalHost().getHostAddress() + ":" + Main.javaserverPort);
 			running = true;
 			connectedClients = new ArrayList<ConnectionHandler>();
+			start();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -52,4 +53,12 @@ public class JavaServer extends Thread	{
 		}
 	}
 	
+	
+	public boolean isOnline()	{
+		return running;
+	}
+	
+	public int getConnectedClients()	{
+		return connectedClients.size();
+	}
 }

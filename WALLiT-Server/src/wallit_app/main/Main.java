@@ -1,4 +1,4 @@
-package main;
+package wallit_app.main;
 
 import java.util.Collections;
 
@@ -8,7 +8,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 
 @SpringBootApplication
-@ComponentScan(basePackages={"main, javaserver, springbootserver"})
+@ComponentScan(basePackages={"wallit_app"})
 public class Main {
 	
 	//public static final int webclientPort = 4200;

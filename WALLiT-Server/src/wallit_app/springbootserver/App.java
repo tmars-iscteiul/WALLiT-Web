@@ -1,4 +1,4 @@
-package springbootserver;
+package wallit_app.springbootserver;
 
 /**
  * Hello world!

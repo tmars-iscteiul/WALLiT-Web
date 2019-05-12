@@ -1,4 +1,5 @@
-package springbootserver;
+package wallit_app.springbootserver;
+
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import javaserver.JavaServer;
+import wallit_app.javaserver.JavaServer;
 
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -33,16 +34,14 @@ public class SpringController {
 	@Autowired
 	private JavaServer javaServer;
 	
-	@RequestMapping("/server_status")
-	public String getListen()	{
-		System.out.println("Recevied a status request.");
-		// Just a test class
-		return "It is online";
+	// Class for easy test
+	@RequestMapping("/javaserver_status")
+	public String getConnectedClients()	{
+		return "The java server currently has " + javaServer.getConnectedClients() + " active client(s).";
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/receivedValues", consumes = "application/json")
 	public void receivedValues (@RequestBody AppData appData) {
-		System.out.println("Received values");
 		int range;
 		String dataTestEuro = "dataTestEuro.json";
 		//if ("") { range = 1 
@@ -53,22 +52,20 @@ public class SpringController {
 	public @ResponseBody ResponseEntity<String> sendValuesSite (@RequestBody AppData appData) {
 		JSONObject jsonObject;
 		JSONParser parser = new JSONParser();
-		try {
-
-				Object obj = parser.parse(new FileReader("./dataTestEuro.json"));
-				jsonObject =  (JSONObject) obj;
-				final HttpHeaders httpHeaders= new HttpHeaders();
-			    httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-			    return new ResponseEntity<String>(jsonObject.toString(), httpHeaders, HttpStatus.OK);
-			
-		} catch (ParseException e) {
+		try	{
+			Object obj = parser.parse(new FileReader("./dataTestEuro.json"));
+			jsonObject =  (JSONObject) obj;
+			final HttpHeaders httpHeaders= new HttpHeaders();
+			httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+			return new ResponseEntity<String>(jsonObject.toString(), httpHeaders, HttpStatus.OK);
+		}	catch (ParseException e)	{
 			e.printStackTrace();   
 			System.err.println("Cannot parse the results json file.");
 			return null;
-		} catch (FileNotFoundException e) {
+		}	catch (FileNotFoundException e)	{
 			System.err.println("Cannot open the results json file.");
 			return null;
-		} catch (IOException e) {
+		}	catch (IOException e) 	{
 			System.err.println("Cannot get the results json file.");
 			return null;
 		}
