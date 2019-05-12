@@ -104,11 +104,20 @@ public class JsonToJava {
 		}
 		
 		public static void writeJson () {
-			if (list_oneMonth.get(0).contentEquals("2019-02-01T00:00:00")) {
-				System.out.println("É isto: 2019-02-01T00:00:00");
-			}
+			AppData dataExample = null;
+			dataExample.setDate("2019-05-12T17:36:00");
+			dataExample.setValue(32.03);
 			
+			String[] vectorAux1= list_oneMonth.get(0).split("\"");
+			String[] vectorAux2= vectorAux1[1].split("T");
+			String[] vectorAux3= vectorAux2[0].split("-");
 			
+			System.out.println("Data: " + vectorAux2[0]);
+			System.out.println("Mês: " + vectorAux3[1]);
+			
+			//String date = vectorAux[0];
+			//double value = Double.parseDouble(vectorAux[1]);
+			//System.out.println("Data: "+ date + "Value: " + value);
 		}
 		
 		public static void main(String[] args) {
