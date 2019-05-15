@@ -105,13 +105,13 @@ public class ConnectionHandler extends Thread {
 		while (s.hasNextLine()) {
 			String nextLine = s.nextLine();
 			String[] args = nextLine.split(",");
-			
-			// If list is full
-			if(!aux.addMovementEntry(new MovementEntry(args))) {
-				// Add full chunk to the main list, create a new chunk and add the last entry to the new chunk
-				res.add(aux);
-				aux = new MovementEntryChunk();
-				aux.addMovementEntry(new MovementEntry(args));
+			if(!nextLine.startsWith("#"))	{	// If is not a comment
+				if(!aux.addMovementEntry(new MovementEntry(args))) {	// If list is full
+					// Add full chunk to the main list, create a new chunk and add the last entry to the new chunk
+					res.add(aux);
+					aux = new MovementEntryChunk();
+					aux.addMovementEntry(new MovementEntry(args));
+				}
 			}
 		}
 		res.add(aux);
