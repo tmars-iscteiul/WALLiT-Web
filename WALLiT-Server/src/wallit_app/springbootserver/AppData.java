@@ -34,6 +34,6 @@ public class AppData {
 	
 	@Override
 	 public String toString() {
-        return date + ":" + value;
+        return "\""+ date +"\""+ ":" + value;
     }
 }

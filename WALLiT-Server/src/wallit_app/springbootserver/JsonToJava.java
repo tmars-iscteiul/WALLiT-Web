@@ -104,9 +104,10 @@ public class JsonToJava {
 		}
 		
 		public static void writeJson () {
-			AppData dataExample = null;
+			AppData dataExample = new AppData();
 			dataExample.setDate("2019-05-12T17:36:00");
 			dataExample.setValue(32.03);
+			System.out.println(dataExample.toString());
 			
 			String[] vectorAux1= list_oneMonth.get(0).split("\"");
 			String[] vectorAux2= vectorAux1[1].split("T");

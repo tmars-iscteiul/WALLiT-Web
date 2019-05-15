@@ -43,7 +43,7 @@ public class SpringController {
 	@RequestMapping(method = RequestMethod.POST, value = "/receivedValues", consumes = "application/json")
 	public void receivedValues (@RequestBody AppData appData) {
 		int range;
-		String dataTestEuro = "dataTestEuro.json";
+		
 		//if ("") { range = 1 
 	}
 	
@@ -54,6 +54,7 @@ public class SpringController {
 		JSONParser parser = new JSONParser();
 		try	{
 			Object obj = parser.parse(new FileReader("./dataTestEuro.json"));
+			//substituir por 5 ficheiros diferentes ex.: oneMonthData.json
 			jsonObject =  (JSONObject) obj;
 			final HttpHeaders httpHeaders= new HttpHeaders();
 			httpHeaders.setContentType(MediaType.APPLICATION_JSON);
