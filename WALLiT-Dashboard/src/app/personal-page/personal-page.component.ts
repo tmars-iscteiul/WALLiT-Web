@@ -20,10 +20,10 @@ export class PersonalPageComponent implements OnInit {
   }
 
   clearFilter() {
-  	document.forms["startDateForm"].elements.namedItem("startDate").value = "";
+  	document.forms["initialDateForm"].elements.namedItem("startDate").value = "";
   	document.forms["endDateForm"].elements.namedItem("endDate").value = "";
 
-  	this.filter("Any");
+  	this.filter("All");
   }
 
   filter(type) {
