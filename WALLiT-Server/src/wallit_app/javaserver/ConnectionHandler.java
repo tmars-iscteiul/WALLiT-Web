@@ -27,6 +27,8 @@ public class ConnectionHandler extends Thread {
 	private ObjectOutputStream objectOut;
 	private boolean online;
 	private int handlerID;
+	private String username;
+	
 	public static final String USER_MOVEMENTS = "./userMovements/";
 	
 	public ConnectionHandler(Socket s, int id)	{
@@ -74,13 +76,24 @@ public class ConnectionHandler extends Thread {
 		AckMessage messageToSend = null;
 		switch(receivedArgs[0])	{
 		case "REQUEST_MOVEMENT_HISTORY":
-			// Change default to the username sent by the android client
+			// Change "default" to the logged in username
 			 messageToSend = new AckMessage("MSG_SEND_DATA", getMovementEntriesByUser("default"));
 			break;
 		case "REQUEST_LOGIN":
 			// Logs in any user (for now)
 			messageToSend = new AckMessage("MSG_ACK_POSITIVE", null);
-			consolePrint(receivedArgs[1] + " authenticated.");
+			username = receivedArgs[1];
+			consolePrint(username + " authenticated.");
+			break;
+		case "REQUEST_DEPOSIT":
+			System.out.println("User wants to deposit: " + receivedArgs[1]);
+			messageToSend = new AckMessage("MSG_ACK_NEGATIVE", null);
+			// TODO Add method call to update JSON files
+			break;
+		case "REQUEST_WITHDRAW":
+			System.out.println("User wants to withdraw: " + receivedArgs[1]);
+			messageToSend = new AckMessage("MSG_ACK_NEGATIVE", null);
+			// TODO Add method call to update JSON files
 			break;
 		default:
 			// Denies any other request for now
