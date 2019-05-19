@@ -140,8 +140,12 @@ public class ConnectionHandler extends Thread {
 		// Sends dummy data for testing purposes. 
 		// TODO Add method call to get real data, instead of random numbers
 		ArrayList<FundInfoEntry> res = new ArrayList<FundInfoEntry>();
-		for(int i = 0; i < 10; i++)	{
-			res.add(new FundInfoEntry(new Random().nextDouble()));
+		double oldValue = 1000.0;
+		int max = 200;
+		for(int i = 0; i < 20; i++)	{
+			double variation = (new Random().nextDouble() * (new Random().nextInt(max*2) - max));	// Returns a random variation between max and -max
+			res.add(new FundInfoEntry(oldValue + variation));
+			oldValue = oldValue + variation;
 		}
 		return res;
 	}
