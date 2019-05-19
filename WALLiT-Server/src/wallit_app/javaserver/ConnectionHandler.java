@@ -79,6 +79,10 @@ public class ConnectionHandler extends Thread {
 			// Change "default" to the logged in username
 			 messageToSend = new AckMessage("MSG_SEND_DATA", getMovementEntriesByUser("default"));
 			break;
+		case "REQUEST_FUND_INFO":
+			messageToSend = new AckMessage("MSG_ACK_NEGATIVE", null);
+			// TODO Add method call to update JSON files
+			break;
 		case "REQUEST_LOGIN":
 			// Logs in any user (for now)
 			messageToSend = new AckMessage("MSG_ACK_POSITIVE", null);
