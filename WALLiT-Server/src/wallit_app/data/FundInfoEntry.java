@@ -36,7 +36,4 @@ public class FundInfoEntry implements Serializable	{
 	public double getValue() {
 		return value;
 	}
-	
-	
-
 }

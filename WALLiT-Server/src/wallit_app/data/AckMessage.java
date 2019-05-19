@@ -11,16 +11,16 @@ public class AckMessage implements Serializable {
     private ArrayList<MovementEntryChunk> movementEntryChunkList;
     private ArrayList<FundInfoEntry> fundInfoList;
 
-    public AckMessage(String ackMessageType, ArrayList<MovementEntryChunk> movementEntryChunkList) {
+    public AckMessage(String ackMessageType, Object objectList) {
         this.ackMessageType = ackMessageType;
-        this.movementEntryChunkList = movementEntryChunkList;
-        this.fundInfoList = null;
-    }
-    
-    public AckMessage(ArrayList<FundInfoEntry> fundInfoList, String ackMessageType) {
-        this.ackMessageType = ackMessageType;
-        this.fundInfoList = fundInfoList;
-        this.movementEntryChunkList = null;
+        if(ackMessageType == "MSG_ACK_FUND_DATA")	{
+        	this.movementEntryChunkList = null;
+            this.fundInfoList = (ArrayList<FundInfoEntry>)objectList;
+        }
+        if(ackMessageType == "MSG_ACK_USER_DATA") {
+        	this.movementEntryChunkList = (ArrayList<MovementEntryChunk>)objectList;
+            this.fundInfoList = null;
+        }
     }
 
     public String getAckMessageType()   {

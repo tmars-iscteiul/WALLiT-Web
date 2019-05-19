@@ -12,6 +12,7 @@ import java.util.Random;
 import java.util.Scanner;
 
 import wallit_app.data.AckMessage;
+import wallit_app.data.FundInfoEntry;
 import wallit_app.data.MovementEntry;
 import wallit_app.data.MovementEntryChunk;
 
@@ -76,12 +77,11 @@ public class ConnectionHandler extends Thread {
 		AckMessage messageToSend = null;
 		switch(receivedArgs[0])	{
 		case "REQUEST_MOVEMENT_HISTORY":
-			// Change "default" to the logged in username
-			 messageToSend = new AckMessage("MSG_SEND_DATA", getMovementEntriesByUser("default"));
+			// TODO Change "default" to the logged in username
+			 messageToSend = new AckMessage("MSG_ACK_USER_DATA", getMovementEntriesByUser("default"));
 			break;
 		case "REQUEST_FUND_INFO":
-			messageToSend = new AckMessage("MSG_ACK_NEGATIVE", null);
-			// TODO Add method call to update JSON files
+			messageToSend = new AckMessage("MSG_ACK_FUND_DATA", getFundInfoEntry());
 			break;
 		case "REQUEST_LOGIN":
 			// Logs in any user (for now)
@@ -133,6 +133,16 @@ public class ConnectionHandler extends Thread {
 		}
 		res.add(aux);
 		s.close();
+		return res;
+	}
+	
+	private ArrayList<FundInfoEntry> getFundInfoEntry()	{
+		// Sends dummy data for testing purposes. 
+		// TODO Add method call to get real data, instead of random numbers
+		ArrayList<FundInfoEntry> res = new ArrayList<FundInfoEntry>();
+		for(int i = 0; i < 10; i++)	{
+			res.add(new FundInfoEntry(new Random().nextDouble()));
+		}
 		return res;
 	}
 	
