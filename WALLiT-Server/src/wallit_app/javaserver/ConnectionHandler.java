@@ -13,8 +13,10 @@ import java.util.Scanner;
 
 import wallit_app.data.AckMessage;
 import wallit_app.data.FundInfoEntry;
+import wallit_app.data.FundInfoEntryChunk;
 import wallit_app.data.MovementEntry;
 import wallit_app.data.MovementEntryChunk;
+import wallit_app.utilities.TimeScaleType;
 
 
 /**
@@ -81,7 +83,7 @@ public class ConnectionHandler extends Thread {
 			 messageToSend = new AckMessage("MSG_ACK_USER_DATA", getMovementEntriesByUser("default"));
 			break;
 		case "REQUEST_FUND_INFO":
-			messageToSend = new AckMessage("MSG_ACK_FUND_DATA", getFundInfoEntry());
+			messageToSend = new AckMessage("MSG_ACK_FUND_DATA", getFundInfoEntryChunks());
 			break;
 		case "REQUEST_LOGIN":
 			// Logs in any user (for now)
@@ -136,13 +138,24 @@ public class ConnectionHandler extends Thread {
 		return res;
 	}
 	
-	private ArrayList<FundInfoEntry> getFundInfoEntry()	{
+	private ArrayList<FundInfoEntryChunk> getFundInfoEntryChunks()	{
+		ArrayList<FundInfoEntryChunk> res = new ArrayList<FundInfoEntryChunk>();
+		// TODO Remove repeated code if possible. This is just plain ugly
+		res.add(new FundInfoEntryChunk(getFundInfoEntry(TimeScaleType.ONE_MONTH), TimeScaleType.ONE_MONTH));
+		res.add(new FundInfoEntryChunk(getFundInfoEntry(TimeScaleType.THREE_MONTHS), TimeScaleType.THREE_MONTHS));
+		res.add(new FundInfoEntryChunk(getFundInfoEntry(TimeScaleType.SIX_MONTHS), TimeScaleType.SIX_MONTHS));
+		res.add(new FundInfoEntryChunk(getFundInfoEntry(TimeScaleType.ONE_YEAR), TimeScaleType.ONE_YEAR));
+		res.add(new FundInfoEntryChunk(getFundInfoEntry(TimeScaleType.FIVE_YEARS), TimeScaleType.FIVE_YEARS));
+		return res;
+	}
+	
+	private ArrayList<FundInfoEntry> getFundInfoEntry(TimeScaleType timeScaleType)	{
 		// Sends dummy data for testing purposes. 
 		// TODO Add method call to get real data, instead of random numbers
 		ArrayList<FundInfoEntry> res = new ArrayList<FundInfoEntry>();
 		double oldValue = 1000.0;
 		int max = 200;
-		for(int i = 0; i < 20; i++)	{
+		for(int i = 0; i < timeScaleType.getEntriesPerScale(); i++)	{
 			double variation = (new Random().nextDouble() * (new Random().nextInt(max*2) - max));	// Returns a random variation between max and -max
 			res.add(new FundInfoEntry(oldValue + variation));
 			oldValue = oldValue + variation;
