@@ -16,7 +16,7 @@ public class MovementEntry implements Serializable	{
     private double amount;
     private double balance;
     
-    public MovementEntry(String date, double amount, double balance)	{
+    public MovementEntry(String date, double amount, double balanceClient)	{
     	this.date = date;
     	this.amount = amount;
     	this.balance = balance;

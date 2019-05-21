@@ -2,7 +2,11 @@ package wallit_app.springbootserver;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -13,41 +17,68 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 
+import wallit_app.data.FundInfoEntry;
+import wallit_app.data.FundInfoEntryChunk;
+import wallit_app.utilities.TimeScaleType;
+
 public class JsonToJava {
 		 String date;
 		 double value;
 		 List<String> list_date;
 		 List<Double> list_value;
 		
-		 static List<String> list_oneMonth;
+		 static ArrayList<FundInfoEntry> list_oneMonth;// testing
+		 
 		 static List<String> list_threeMonths;
 		 static List<String> list_sixMonths;
 		 static List<String> list_oneYear;
 		 static List<String> list_fiveYears;
 		 
-		public static void readJson () {
+		 public static FundInfoEntryChunk fiec_oneMonth;
+		 
+		
+		public static void readJson () throws ParseException {
 
 			 
 			JsonParser parser = new JsonParser();
             Object obj;
 			try {
-				obj = parser.parse(new FileReader(".\\dataTestEuro.json"));
+				obj = parser.parse(new FileReader(".\\dataTestOneMonth.json"));
 				
 				JsonObject jsonObject = (JsonObject) obj;
 		        System.out.println(jsonObject);
 				
 		        // oneMonth
-		        list_oneMonth = new ArrayList<String>();	            
+		        list_oneMonth = new ArrayList<FundInfoEntry>();
 	            JsonArray msg_oneMonth = (JsonArray) jsonObject.get("oneMonth");
 	            Iterator<JsonElement> iteratorOneMonth = msg_oneMonth.iterator();
-	            String oneMonthRead;
+	            
+	            FundInfoEntry oneMonthRead;
 				while (iteratorOneMonth.hasNext()) {
-	            	oneMonthRead = iteratorOneMonth.next().toString();
+					
+					String[] vectorAux1= iteratorOneMonth.next().toString().split("\""); //vectorAux1[1]= Data		
+					String[] vectorAux2= vectorAux1[2].split(":");
+					String[] vectorAux3= vectorAux2[1].split("}"); //vectorAux3[0] = Valor		
+					//System.out.println("Data ->" + vectorAux1[1] + ";"+ "Valor ->" + vectorAux3[0]);
+					
+					String formatDate = "yyyy-MM-dd" + " " + "HH:mm:ss";
+					DateFormat df = new SimpleDateFormat(formatDate);	
+					Date dateRead = df.parse(vectorAux1[1]); //TODO change the configuration of the date
+					
+					double valueRead = Double.parseDouble(vectorAux3[0]);
+					
+					System.out.println("DateRead: " + dateRead + "    ValueRead: " +valueRead );
+					
+					oneMonthRead = new FundInfoEntry(dateRead, valueRead);
 	            	list_oneMonth.add(oneMonthRead);                
 	            } 	            
-	            System.out.println("oneMonth---->" + list_oneMonth);
-	            System.out.println("oneMonth 2ºelemento---->" + list_oneMonth.get(1));
-	            
+				System.out.println("Ultimo valor da lista : " + list_oneMonth.get(list_oneMonth.size()-1).getValue());  
+				System.out.println("Ultima data lista : " + list_oneMonth.get(list_oneMonth.size()-1).getDate());
+				
+				fiec_oneMonth = new FundInfoEntryChunk(list_oneMonth, TimeScaleType.ONE_MONTH);
+				
+				
+	            /*
 	            
 	            //threeMonths
 	            list_threeMonths = new ArrayList<String>();            
@@ -88,43 +119,23 @@ public class JsonToJava {
 	            	list_fiveYears.add(fiveYearsRead);                
 	            } 	            
 	            System.out.println("fiveYears---->" + list_fiveYears + "\n");
-	            
+	            */
 				
 			} catch (JsonIOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (JsonSyntaxException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
             
 		}
+
 		
-		public static void writeJson () {
-			/*
-			AppData dataExample = new AppData();
-			dataExample.setDate("2019-05-12T17:36:00");
-			dataExample.setValue(32.03);
-			System.out.println(dataExample.toString());
-			*/
-			
-			String[] vectorAux1= list_oneMonth.get(0).split("\"");
-			String[] vectorAux2= vectorAux1[1].split("T");
-			String[] vectorAux3= vectorAux2[0].split("-");
-			
-			System.out.println("Data: " + vectorAux2[0]);
-			System.out.println("Mês: " + vectorAux3[1]);
-			
-			//String date = vectorAux[0];
-			//double value = Double.parseDouble(vectorAux[1]);
-			//System.out.println("Data: "+ date + "Value: " + value);
-		}
-		
-		public static void main(String[] args) {
+		public static void main(String[] args) throws ParseException {
 			readJson();
-			writeJson();
+			//writeJson();
 		}
+
+		
 }
