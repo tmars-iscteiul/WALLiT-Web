@@ -32,15 +32,18 @@ public class ConnectionHandler extends Thread {
 	private int handlerID;
 	private String username;
 	
+	private JavaServer javaServer;
+	
 	public static final String USER_MOVEMENTS = "./userMovements/";
 	
-	public ConnectionHandler(Socket s, int id)	{
+	public ConnectionHandler(Socket s, int id, JavaServer javaServer)	{
 		try {
 			online = true;
 			handlerID = id;
 			clientSocket = s;
 			objectIn = new ObjectInputStream(clientSocket.getInputStream());
 			objectOut = new ObjectOutputStream(clientSocket.getOutputStream());
+			this.javaServer = javaServer;
 			consolePrint("Handler online.");
 			} catch (IOException e) {
 			e.printStackTrace();
@@ -53,12 +56,6 @@ public class ConnectionHandler extends Thread {
 			try {
 				String receivedData = (String)objectIn.readObject();
 				consolePrint("Received data from client: \"" + receivedData + "\".");
-				try {
-					// Simulating delay on connection
-					sleep(500);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
 				handleUserRequest(receivedData.split(","));
 			} catch (IOException | ClassNotFoundException e) {
 				// TODO Add a way to know what happened with the connection
@@ -93,16 +90,18 @@ public class ConnectionHandler extends Thread {
 			break;
 		case "REQUEST_DEPOSIT":
 			System.out.println("User wants to deposit: " + receivedArgs[1]);
+			deposit(username, Double.parseDouble(receivedArgs[1]));
+			// TODO Sends negative ack because the deposit operation isn't fully implemented
 			messageToSend = new AckMessage("MSG_ACK_NEGATIVE", null);
-			// TODO Add method call to update JSON files
 			break;
 		case "REQUEST_WITHDRAW":
 			System.out.println("User wants to withdraw: " + receivedArgs[1]);
+			withdraw(username, Double.parseDouble(receivedArgs[1]));
+			// TODO Sends negative ack because the withdraw operation isn't fully implemented
 			messageToSend = new AckMessage("MSG_ACK_NEGATIVE", null);
-			// TODO Add method call to update JSON files
 			break;
 		default:
-			// Denies any other request for now
+			// Denies any other request
 			messageToSend = new AckMessage("MSG_ACK_NEGATIVE", null);
 			break;
 		}
@@ -163,12 +162,49 @@ public class ConnectionHandler extends Thread {
 		return res;
 	}
 	
+	private void deposit(String username, double valueToDeposit) {
+		/*
+		 * This method will do two main things:
+		 * - Update user's movement file, adding a new line to it, with the calculated balance.
+		 * - Update the fund's data file, calculating for each time scale what value should be added and in what date (based on all the rules)
+		 * 
+		 * method updateFile, is called to update fund data files.
+		 */
+		
+		/*
+		 * Open file, check last balance, add new line with deposit entry with updated balance
+		 */
+		
+		/*
+		 * TODO Catarina, update json with deposit data
+		 */
+	}
+	
+	private void withdraw(String username, double valueToWithdraw) {
+		/*
+		 * This method will do two main things:
+		 * - Update user's movement file, adding a new line to it, with the calculated balance.
+		 * - Update the fund's data file, calculating for each time scale what value should be added and in what date (based on all the rules)
+		 * 
+		 * method updateFile, is called to update fund data files.
+		 */
+		
+		/*
+		 * Open file, check last balance, add new line with withdraw entry with updated balance
+		 */
+		
+		/*
+		 * TODO Catarina, update json with withdraw data
+		 */
+	}
+	
 	private void disconnect()	{
 		try {
 			clientSocket.close();
 			objectIn.close();
 			objectOut.close();
 			online = false;
+			javaServer.clearConnectionHandler(handlerID);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

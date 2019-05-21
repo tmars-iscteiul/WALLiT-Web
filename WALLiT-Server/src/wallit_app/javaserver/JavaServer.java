@@ -21,7 +21,6 @@ public class JavaServer extends Thread	{
 
 	private ServerSocket serverSocket;
 	private ArrayList<ConnectionHandler> connectedClients;
-	// Connected clients list with various threads per active connection
 	// TODO Remove disconnected clients from list, clear resource space
 	private boolean running;
 	
@@ -45,7 +44,7 @@ public class JavaServer extends Thread	{
 			try {
 				Socket clientSocket = serverSocket.accept();	// Locked until a new client attempts to connect
 				System.out.println("[JavaServer] Connection accepted: " + clientSocket.getInetAddress() + ":" + clientSocket.getPort());
-				connectedClients.add(new ConnectionHandler(clientSocket, connectedClients.size()));
+				connectedClients.add(new ConnectionHandler(clientSocket, connectedClients.size(), this));
 				connectedClients.get(connectedClients.size()-1).start();
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -53,6 +52,9 @@ public class JavaServer extends Thread	{
 		}
 	}
 	
+	public void clearConnectionHandler(int id)	{
+		connectedClients.remove(id-1);
+	}
 	
 	public boolean isOnline()	{
 		return running;
