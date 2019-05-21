@@ -41,15 +41,15 @@ public class SpringController {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/receivedValues", consumes = "application/json")
-	public void receivedValues (@RequestBody AppData appData) {
+	public void receivedValues (@RequestBody String appData) {
 		int range;
 		
 		//if ("") { range = 1 
 	}
 	
 	@CrossOrigin(origins = "http://localhost:4200")
-	@RequestMapping(method = RequestMethod.POST, value = "/sendValuesSite", consumes = "application/graphic")
-	public @ResponseBody ResponseEntity<String> sendValuesSite (@RequestBody AppData appData) {
+	@RequestMapping(method = RequestMethod.POST, value = "/sendValuesSite", consumes = "application/json")
+	public @ResponseBody ResponseEntity<String> sendValuesSite (@RequestBody String appData) {// string ??
 		JSONObject jsonObject;
 		JSONParser parser = new JSONParser();
 		try	{
