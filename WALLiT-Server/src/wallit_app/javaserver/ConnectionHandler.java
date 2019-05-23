@@ -8,6 +8,8 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -154,9 +156,11 @@ public class ConnectionHandler extends Thread {
 		ArrayList<FundInfoEntry> res = new ArrayList<FundInfoEntry>();
 		double oldValue = 1000.0;
 		int max = 200;
+		Calendar calendar = Calendar.getInstance();	// Only used to generate random dates
 		for(int i = 0; i < timeScaleType.getEntriesPerScale(); i++)	{
 			double variation = (new Random().nextDouble() * (new Random().nextInt(max*2) - max));	// Returns a random variation between max and -max
-			res.add(new FundInfoEntry(oldValue + variation));
+			calendar.add(Calendar.DATE, 1); // Only used to generate random dates (adds one day each entry)
+			res.add(new FundInfoEntry(calendar.getTime(), oldValue + variation));
 			oldValue = oldValue + variation;
 		}
 		return res;

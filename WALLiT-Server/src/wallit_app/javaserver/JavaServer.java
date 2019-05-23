@@ -53,7 +53,7 @@ public class JavaServer extends Thread	{
 	}
 	
 	public void clearConnectionHandler(int id)	{
-		connectedClients.remove(id-1);
+		connectedClients.remove(id);
 	}
 	
 	public boolean isOnline()	{
