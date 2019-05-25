@@ -86,7 +86,7 @@ public class ConnectionHandler extends Thread {
 			break;
 		case "REQUEST_LOGIN":
 			// Logs in any user (for now)
-			messageToSend = new AckMessage("MSG_ACK_POSITIVE", null);
+			messageToSend = new AckMessage("MSG_ACK_POSITIVE", getUpdatedBalanceByUser("default"));
 			username = receivedArgs[1];
 			consolePrint(username + " authenticated.");
 			break;
@@ -112,6 +112,25 @@ public class ConnectionHandler extends Thread {
         objectOut.reset();
 	}
 
+	private double getUpdatedBalanceByUser(String username)	{
+		Scanner s;
+		try {
+			s = new Scanner(new File(USER_MOVEMENTS + username + ".txt"));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return -1;
+		}
+		double res = -1;
+		while(s.hasNextLine())	{
+			String nextLine = s.nextLine();
+			if(!nextLine.startsWith("#"))	{	// If is not a comment
+				res = Double.parseDouble(nextLine.split(",")[2]);
+			}
+		}
+		s.close();
+		return res;
+	}
+	
 	private ArrayList<MovementEntryChunk> getMovementEntriesByUser(String username)	{
 		Scanner s;
 		try {
