@@ -36,6 +36,7 @@ public class JsonToJava {
 		 
 		 public static FundInfoEntryChunk fiec_oneMonth;
 		 
+		public static JsonArray jsonArrayOneMonth;
 		
 		public static void readJson () throws ParseException {
 
@@ -50,8 +51,8 @@ public class JsonToJava {
 				
 		        // oneMonth
 		        list_oneMonth = new ArrayList<FundInfoEntry>();
-	            JsonArray msg_oneMonth = (JsonArray) jsonObject.get("oneMonth");
-	            Iterator<JsonElement> iteratorOneMonth = msg_oneMonth.iterator();
+	            jsonArrayOneMonth = (JsonArray) jsonObject.get("oneMonth");
+	            Iterator<JsonElement> iteratorOneMonth = jsonArrayOneMonth.iterator();
 	            
 	            FundInfoEntry oneMonthRead;
 				while (iteratorOneMonth.hasNext()) {
