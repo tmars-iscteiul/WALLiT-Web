@@ -14,6 +14,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -141,24 +143,29 @@ public class ConnectionHandler extends Thread {
 	
 	private ArrayList<MovementEntryChunk> getMovementEntriesByUser(String username)	{
 		Scanner s;
+		LinkedList<String> fileLines = new LinkedList<String>();
 		try {
 			s = new Scanner(new File(USER_MOVEMENTS + username + ".txt"));
+			while (s.hasNextLine()) {
+				String nextLine = s.nextLine();
+				if(!nextLine.startsWith("#"))	{	// If is not a comment
+					fileLines.push(nextLine);
+				}
+			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			return null;
 		}
 		ArrayList<MovementEntryChunk> res = new ArrayList<MovementEntryChunk>();
 		MovementEntryChunk aux = new MovementEntryChunk();
-		while (s.hasNextLine()) {
-			String nextLine = s.nextLine();
+		while (!fileLines.isEmpty()) {
+			String nextLine = fileLines.pop();
 			String[] args = nextLine.split(",");
-			if(!nextLine.startsWith("#"))	{	// If is not a comment
-				if(!aux.addMovementEntry(new MovementEntry(args))) {	// If list is full
-					// Add full chunk to the main list, create a new chunk and add the last entry to the new chunk
-					res.add(aux);
-					aux = new MovementEntryChunk();
-					aux.addMovementEntry(new MovementEntry(args));
-				}
+			if(!aux.addMovementEntry(new MovementEntry(args))) {	// If list is full
+				// Add full chunk to the main list, create a new chunk and add the last entry to the new chunk
+				res.add(aux);
+				aux = new MovementEntryChunk();
+				aux.addMovementEntry(new MovementEntry(args));
 			}
 		}
 		System.out.println(aux.getMovementEntryList().get(0).getDate());
