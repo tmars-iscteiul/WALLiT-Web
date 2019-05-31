@@ -2,11 +2,15 @@ package wallit_app.javaserver;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.SocketException;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -54,15 +58,18 @@ public class ConnectionHandler extends Thread {
 	
 	// TODO Add connection timeout (closes the socket, informing the client (somehow) that the connection has timed out).
 	public void run()	{
+		
 		while(online)	{
 			try {
 				String receivedData = (String)objectIn.readObject();
+				sleep(0);
 				consolePrint("Received data from client: \"" + receivedData + "\".");
 				handleUserRequest(receivedData.split(","));
-			} catch (IOException | ClassNotFoundException e) {
+			} catch (IOException e) {
 				// TODO Add a way to know what happened with the connection
-				consolePrint("Terminating the connection: reason to be determinded.");
+				consolePrint("Terminating the connection.");
 				disconnect();
+			} catch (InterruptedException | ClassNotFoundException e) {
 				e.printStackTrace();
 			}
 		}
@@ -70,37 +77,38 @@ public class ConnectionHandler extends Thread {
 	
 	/*
 	 * Message standard sent by android client
-	 * Arg1: COMMAND
-	 * Arg2: USERNAME
-	 * Arg3: EXTRA DATA
+	 * Arg0: COMMAND
+	 * Arg1: USERNAME
+	 * Arg2: EXTRA DATA
 	 */
 	private void handleUserRequest(String receivedArgs[]) throws IOException	{
 		AckMessage messageToSend = null;
 		switch(receivedArgs[0])	{
 		case "REQUEST_MOVEMENT_HISTORY":
-			// TODO Change "default" to the logged in username
-			 messageToSend = new AckMessage("MSG_ACK_USER_DATA", getMovementEntriesByUser("default"));
+			 messageToSend = new AckMessage("MSG_ACK_USER_DATA", getMovementEntriesByUser(receivedArgs[1]));
 			break;
 		case "REQUEST_FUND_INFO":
 			messageToSend = new AckMessage("MSG_ACK_FUND_DATA", getFundInfoEntryChunks());
 			break;
 		case "REQUEST_LOGIN":
 			// Logs in any user (for now)
-			messageToSend = new AckMessage("MSG_ACK_POSITIVE", getUpdatedBalanceByUser("default"));
+			messageToSend = new AckMessage("MSG_ACK_POSITIVE", getUpdatedBalanceByUser(receivedArgs[1]));
 			username = receivedArgs[1];
 			consolePrint(username + " authenticated.");
 			break;
 		case "REQUEST_DEPOSIT":
-			System.out.println("User wants to deposit: " + receivedArgs[1]);
-			deposit(username, Double.parseDouble(receivedArgs[1]));
-			// TODO Sends negative ack because the deposit operation isn't fully implemented
-			messageToSend = new AckMessage("MSG_ACK_NEGATIVE", null);
+			consolePrint(receivedArgs[1] + " wants to deposit: " + receivedArgs[2]);
+			if(deposit(username, Double.parseDouble(receivedArgs[2])))	
+				messageToSend = new AckMessage("MSG_ACK_POSITIVE", null);
+			else
+				messageToSend = new AckMessage("MSG_ACK_NEGATIVE", null);
 			break;
 		case "REQUEST_WITHDRAW":
-			System.out.println("User wants to withdraw: " + receivedArgs[1]);
-			withdraw(username, Double.parseDouble(receivedArgs[1]));
-			// TODO Sends negative ack because the withdraw operation isn't fully implemented
-			messageToSend = new AckMessage("MSG_ACK_NEGATIVE", null);
+			consolePrint(receivedArgs[1] + " wants to withdraw: " + receivedArgs[2]);
+			if(withdraw(username, Double.parseDouble(receivedArgs[2])))	
+				messageToSend = new AckMessage("MSG_ACK_POSITIVE", null);
+			else
+				messageToSend = new AckMessage("MSG_ACK_NEGATIVE", null);
 			break;
 		default:
 			// Denies any other request
@@ -114,21 +122,21 @@ public class ConnectionHandler extends Thread {
 
 	private double getUpdatedBalanceByUser(String username)	{
 		Scanner s;
+		double lastValue = 0;
 		try {
 			s = new Scanner(new File(USER_MOVEMENTS + username + ".txt"));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
-			return -1;
+			return lastValue;
 		}
-		double res = -1;
 		while(s.hasNextLine())	{
 			String nextLine = s.nextLine();
 			if(!nextLine.startsWith("#"))	{	// If is not a comment
-				res = Double.parseDouble(nextLine.split(",")[2]);
+				lastValue = Double.parseDouble(nextLine.split(",")[2]);
 			}
 		}
 		s.close();
-		return res;
+		return lastValue;
 	}
 	
 	private ArrayList<MovementEntryChunk> getMovementEntriesByUser(String username)	{
@@ -153,6 +161,7 @@ public class ConnectionHandler extends Thread {
 				}
 			}
 		}
+		System.out.println(aux.getMovementEntryList().get(0).getDate());
 		res.add(aux);
 		s.close();
 		return res;
@@ -185,36 +194,48 @@ public class ConnectionHandler extends Thread {
 		return res;
 	}
 	
-	private void deposit(String username, double valueToDeposit) {
-		/*
-		 * This method will do two main things:
-		 * - Update user's movement file, adding a new line to it, with the calculated balance.
-		 * - Update the fund's data file, calculating for each time scale what value should be added and in what date (based on all the rules)
-		 * 
-		 * method updateFile, is called to update fund data files.
-		 */
-		
-		/*
-		 * Open file, check last balance, add new line with deposit entry with updated balance
-		 */
-		
+	private boolean deposit(String username, double valueToDeposit) {
+		double balance = getUpdatedBalanceByUser(username);
+		PrintWriter pw;
+		try {
+			pw = new PrintWriter(new FileWriter(USER_MOVEMENTS + username + ".txt", true));
+			balance += valueToDeposit;
+			String s = new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + "," + valueToDeposit + "," + balance;
+			pw.println();
+			pw.print(s);
+			pw.close();
+			return true;
+		} 	catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}	catch (IOException e) {
+			e.printStackTrace();
+		}
+		return false;
 		/*
 		 * TODO Catarina, update json with deposit data
 		 */
 	}
 	
-	private void withdraw(String username, double valueToWithdraw) {
-		/*
-		 * This method will do two main things:
-		 * - Update user's movement file, adding a new line to it, with the calculated balance.
-		 * - Update the fund's data file, calculating for each time scale what value should be added and in what date (based on all the rules)
-		 * 
-		 * method updateFile, is called to update fund data files.
-		 */
-		
-		/*
-		 * Open file, check last balance, add new line with withdraw entry with updated balance
-		 */
+	private boolean withdraw(String username, double valueToWithdraw) {
+		double balance = getUpdatedBalanceByUser(username);
+		if(balance < valueToWithdraw)	{	// If the user doesn't have enough balance to withdraw
+			return false;
+		}
+		PrintWriter pw;
+		try {
+			pw = new PrintWriter(new FileWriter(USER_MOVEMENTS + username + ".txt", true));
+			balance -= valueToWithdraw;
+			String s = new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + "," + -valueToWithdraw + "," + balance;
+			pw.println();
+			pw.print(s);
+			pw.close();
+			return true;
+		} 	catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}	catch (IOException e) {
+			e.printStackTrace();
+		}
+		return false;
 		
 		/*
 		 * TODO Catarina, update json with withdraw data
