@@ -181,26 +181,14 @@ public class ConnectionHandler extends Thread {
 	private ArrayList<FundInfoEntryChunk> getFundInfoEntryChunks()	{
 		ArrayList<FundInfoEntryChunk> res = new ArrayList<FundInfoEntryChunk>();
 		// TODO Remove repeated code if possible. This is just plain ugly
-		res.add(new FundInfoEntryChunk(getFundInfoEntry(TimeScaleType.ONE_MONTH), TimeScaleType.ONE_MONTH));
-		res.add(new FundInfoEntryChunk(getFundInfoEntry(TimeScaleType.THREE_MONTHS), TimeScaleType.THREE_MONTHS));
-		res.add(new FundInfoEntryChunk(getFundInfoEntry(TimeScaleType.SIX_MONTHS), TimeScaleType.SIX_MONTHS));
-		res.add(new FundInfoEntryChunk(getFundInfoEntry(TimeScaleType.ONE_YEAR), TimeScaleType.ONE_YEAR));
-		res.add(new FundInfoEntryChunk(getFundInfoEntry(TimeScaleType.FIVE_YEARS), TimeScaleType.FIVE_YEARS));
-		return res;
-	}
-	
-	private ArrayList<FundInfoEntry> getFundInfoEntry(TimeScaleType timeScaleType)	{
-		// Sends dummy data for testing purposes. 
-		// TODO Add method call to get real data, instead of random numbers
-		ArrayList<FundInfoEntry> res = new ArrayList<FundInfoEntry>();
-		double oldValue = 1000.0;
-		int max = 200;
-		Calendar calendar = Calendar.getInstance();	// Only used to generate random dates
-		for(int i = 0; i < timeScaleType.getEntriesPerScale(); i++)	{
-			double variation = (new Random().nextDouble() * (new Random().nextInt(max*2) - max));	// Returns a random variation between max and -max
-			calendar.add(Calendar.DATE, 1); // Only used to generate random dates (adds one day each entry)
-			res.add(new FundInfoEntry(calendar.getTime(), oldValue + variation));
-			oldValue = oldValue + variation;
+		try {
+			res.add(new FundInfoEntryChunk(JsonHandler.getTimescaledFundInfoList(TimeScaleType.ONE_MONTH), TimeScaleType.ONE_MONTH));
+			res.add(new FundInfoEntryChunk(JsonHandler.getTimescaledFundInfoList(TimeScaleType.THREE_MONTHS), TimeScaleType.THREE_MONTHS));
+			res.add(new FundInfoEntryChunk(JsonHandler.getTimescaledFundInfoList(TimeScaleType.SIX_MONTHS), TimeScaleType.SIX_MONTHS));
+			res.add(new FundInfoEntryChunk(JsonHandler.getTimescaledFundInfoList(TimeScaleType.ONE_YEAR), TimeScaleType.ONE_YEAR));
+			res.add(new FundInfoEntryChunk(JsonHandler.getTimescaledFundInfoList(TimeScaleType.FIVE_YEARS), TimeScaleType.FIVE_YEARS));
+		} catch (JsonIOException | JsonSyntaxException | FileNotFoundException e) {
+			e.printStackTrace();
 		}
 		return res;
 	}
