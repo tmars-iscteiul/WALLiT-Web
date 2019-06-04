@@ -1,0 +1,27 @@
+[
+  {
+    "date": "Jun 4, 2019 1:18:27 PM",
+    "amount": 500.0,
+    "balance": 500.0
+  },
+  {
+    "date": "Jun 4, 2019 1:22:28 PM",
+    "amount": 500.0,
+    "balance": 1000.0
+  },
+  {
+    "date": "Jun 4, 2019 1:23:54 PM",
+    "amount": -1000.0,
+    "balance": 0.0
+  },
+  {
+    "date": "Jun 4, 2019 1:25:14 PM",
+    "amount": 2500.0,
+    "balance": 2500.0
+  },
+  {
+    "date": "Jun 4, 2019 1:25:33 PM",
+    "amount": -1500.0,
+    "balance": 1000.0
+  }
+]

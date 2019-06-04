@@ -46,8 +46,6 @@ public class ConnectionHandler extends Thread {
 	
 	private JavaServer javaServer;
 	
-	public static final String USER_MOVEMENTS_LOCATION = "./userMovements/";
-	
 	public ConnectionHandler(Socket s, int id, JavaServer javaServer)	{
 		try {
 			online = true;
@@ -127,60 +125,40 @@ public class ConnectionHandler extends Thread {
 	}
 
 	private double getUpdatedBalanceByUser(String username)	{
-		Scanner s;
-		double lastValue = 0;
 		try {
-			s = new Scanner(new File(USER_MOVEMENTS_LOCATION + username + ".txt"));
-		} catch (FileNotFoundException e) {
+			ArrayList<MovementEntry> aux = JsonHandler.getMovementEntryListFromUser(username);
+			if(aux.isEmpty())
+				return 0;
+			return aux.get(0).getBalance();
+		} catch (JsonIOException | JsonSyntaxException | IOException e) {
 			e.printStackTrace();
-			return lastValue;
 		}
-		while(s.hasNextLine())	{
-			String nextLine = s.nextLine();
-			if(!nextLine.startsWith("#") && !nextLine.isEmpty())	{	// If is not a comment
-				lastValue = Double.parseDouble(nextLine.split(",")[2]);
-			}
-		}
-		s.close();
-		return lastValue;
+		return 0;
 	}
 	
 	private ArrayList<MovementEntryChunk> getMovementEntriesByUser(String username)	{
-		Scanner s;
-		LinkedList<String> fileLines = new LinkedList<String>();
 		try {
-			s = new Scanner(new File(USER_MOVEMENTS_LOCATION + username + ".txt"));
-			while (s.hasNextLine()) {
-				String nextLine = s.nextLine();
-				if(!nextLine.startsWith("#"))	{	// If is not a comment
-					fileLines.push(nextLine);
+			ArrayList<MovementEntryChunk> res = new ArrayList<MovementEntryChunk>();
+			ArrayList<MovementEntry> userMovementList = JsonHandler.getMovementEntryListFromUser(username);
+			MovementEntryChunk aux = new MovementEntryChunk();
+			for(int i = 0; i < userMovementList.size(); i++)	{
+				if(!aux.addMovementEntry(userMovementList.get(i))) {	// If list is full
+					// Add full chunk to the main list, create a new chunk and add the last entry to the new chunk
+					res.add(aux);
+					aux = new MovementEntryChunk();
+					aux.addMovementEntry(userMovementList.get(i));
 				}
 			}
-		} catch (FileNotFoundException e) {
+			res.add(aux);
+			return res;
+		} catch (JsonIOException | JsonSyntaxException | IOException e) {
 			e.printStackTrace();
 			return null;
 		}
-		ArrayList<MovementEntryChunk> res = new ArrayList<MovementEntryChunk>();
-		MovementEntryChunk aux = new MovementEntryChunk();
-		while (!fileLines.isEmpty()) {
-			String nextLine = fileLines.pop();
-			String[] args = nextLine.split(",");
-			if(!aux.addMovementEntry(new MovementEntry(args))) {	// If list is full
-				// Add full chunk to the main list, create a new chunk and add the last entry to the new chunk
-				res.add(aux);
-				aux = new MovementEntryChunk();
-				aux.addMovementEntry(new MovementEntry(args));
-			}
-		}
-		System.out.println(aux.getMovementEntryList().get(0).getDate());
-		res.add(aux);
-		s.close();
-		return res;
 	}
 	
 	private ArrayList<FundInfoEntryChunk> getFundInfoEntryChunks()	{
 		ArrayList<FundInfoEntryChunk> res = new ArrayList<FundInfoEntryChunk>();
-		// TODO Remove repeated code if possible. This is just plain ugly
 		try {
 			res.add(new FundInfoEntryChunk(JsonHandler.getTimescaledFundInfoList(TimeScaleType.ONE_MONTH), TimeScaleType.ONE_MONTH));
 			res.add(new FundInfoEntryChunk(JsonHandler.getTimescaledFundInfoList(TimeScaleType.THREE_MONTHS), TimeScaleType.THREE_MONTHS));
@@ -195,19 +173,10 @@ public class ConnectionHandler extends Thread {
 	
 	private boolean deposit(String username, double valueToDeposit) {
 		// Updates the user's movement data file
-		double currentUserBalance = getUpdatedBalanceByUser(username);
-		PrintWriter pw;
 		try {
-			pw = new PrintWriter(new FileWriter(USER_MOVEMENTS_LOCATION + username + ".txt", true));
-			currentUserBalance += valueToDeposit;
-			String s = new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + "," + valueToDeposit + "," + currentUserBalance;
-			pw.println(s);
-			pw.close();
-		} 	catch (FileNotFoundException e) {
-			e.printStackTrace();
-			return false;
-		}	catch (IOException e) {
-			e.printStackTrace();
+			JsonHandler.addMovementToUserMovementListFile(valueToDeposit, username);
+		} catch (JsonIOException | JsonSyntaxException | IOException e1) {
+			e1.printStackTrace();
 			return false;
 		}
 		
@@ -223,23 +192,10 @@ public class ConnectionHandler extends Thread {
 	}
 	
 	private boolean withdraw(String username, double valueToWithdraw) {
-		double currentUserBalance = getUpdatedBalanceByUser(username);
-		if(currentUserBalance < valueToWithdraw)	{	// If the user doesn't have enough balance to withdraw
-			return false;
-		}
-		// Updates the user's movement data file
-		PrintWriter pw;
 		try {
-			pw = new PrintWriter(new FileWriter(USER_MOVEMENTS_LOCATION + username + ".txt", true));
-			currentUserBalance -= valueToWithdraw;
-			String s = new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + "," + -valueToWithdraw + "," + currentUserBalance;
-			pw.println(s);
-			pw.close();
-		} 	catch (FileNotFoundException e) {
-			e.printStackTrace();
-			return false;
-		}	catch (IOException e) {
-			e.printStackTrace();
+			JsonHandler.addMovementToUserMovementListFile(-valueToWithdraw, username);
+		} catch (JsonIOException | JsonSyntaxException | IOException e1) {
+			e1.printStackTrace();
 			return false;
 		}
 		

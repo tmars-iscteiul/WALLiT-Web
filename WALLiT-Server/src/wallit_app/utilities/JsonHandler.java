@@ -1,13 +1,16 @@
 package wallit_app.utilities;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.text.SimpleDateFormat;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -16,9 +19,11 @@ import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 
 import wallit_app.data.FundInfoEntry;
+import wallit_app.data.MovementEntry;
 
 public class JsonHandler {
 	
+	public static final String USER_MOVEMENTS_LOCATION = "./userMovements/";
 	public static final String FUND_INFO_LOCATION = "./fundinfo_data.json";
 
 	// Adds a new entry to the main FundInfoEntry data file
@@ -53,7 +58,7 @@ public class JsonHandler {
 	public static ArrayList<FundInfoEntry> getTimescaledFundInfoList(TimeScaleType timescale) throws JsonIOException, JsonSyntaxException, FileNotFoundException	{
 		// Reads the current data file, transforming it into a FundInfoEntry ArrayList object
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
-		ArrayList<FundInfoEntry> listFromFile = gson.fromJson(new FileReader("./fundinfo_data.json"), new TypeToken<ArrayList<FundInfoEntry>>(){}.getType());
+		ArrayList<FundInfoEntry> listFromFile = gson.fromJson(new FileReader(FUND_INFO_LOCATION), new TypeToken<ArrayList<FundInfoEntry>>(){}.getType());
 		
 		// Creates a new empty list, and inserts the entries depending on the timescale
 		// This is assuming the list has enough entries to support at least 5 years (360*5 entries minimum, otherwise it will crash)
@@ -74,9 +79,57 @@ public class JsonHandler {
 	public static double getLastFundInfoEntryValue() throws JsonIOException, JsonSyntaxException, FileNotFoundException	{
 		// Reads the current data file, transforming it into a FundInfoEntry ArrayList object
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
-		ArrayList<FundInfoEntry> listFromFile = gson.fromJson(new FileReader("./fundinfo_data.json"), new TypeToken<ArrayList<FundInfoEntry>>(){}.getType());
+		ArrayList<FundInfoEntry> listFromFile = gson.fromJson(new FileReader(FUND_INFO_LOCATION), new TypeToken<ArrayList<FundInfoEntry>>(){}.getType());
 		
 		return listFromFile.get(listFromFile.size()-1).getValue();
 	}
 	
+	//
+	public static void addMovementToUserMovementListFile(double valueToAdd, String username) throws JsonIOException, JsonSyntaxException, IOException	{
+		// Reads the current data file, transforming it into a MovementEntry ArrayList object
+		ArrayList<MovementEntry> aux = getMovementEntryListFromUser(username);
+		
+		// Adds a new entry to the list
+		double currentUserBalance = 0;
+		if(!aux.isEmpty())
+			currentUserBalance = aux.get(aux.size()-1).getBalance();
+		currentUserBalance += valueToAdd;
+		aux.add(new MovementEntry(valueToAdd, currentUserBalance));
+		
+		// Updates the data file
+		Writer writer = new FileWriter(USER_MOVEMENTS_LOCATION + username + ".json");
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		gson.toJson(aux, writer);
+		writer.flush();
+        writer.close();
+	}
+	
+	//
+	public static ArrayList<MovementEntry> getMovementEntryListFromUser(String username) throws JsonIOException, JsonSyntaxException, IOException	{
+		// Reads the current data file, transforming it into a MovementEntry ArrayList object
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		File f = new File(USER_MOVEMENTS_LOCATION + username + ".json");
+		if(!f.exists())	{
+			Writer writer = new FileWriter(USER_MOVEMENTS_LOCATION + username + ".json");
+			gson.toJson(new ArrayList<MovementEntry>(), writer);
+			writer.flush();
+	        writer.close();
+		}
+		ArrayList<MovementEntry> listFromFile = gson.fromJson(new FileReader(USER_MOVEMENTS_LOCATION + username + ".json"), new TypeToken<ArrayList<MovementEntry>>(){}.getType());
+		
+		// Inverts the list to sent, since the read operation is inverted
+		ArrayList<MovementEntry> res = new ArrayList<>();
+		for(int i = 0; i < listFromFile.size(); i++)	{
+			res.add(listFromFile.get(listFromFile.size()-1-i));
+		}
+		
+		return res;
+	}
+	
+	
+	
 }
+
+
+
+
