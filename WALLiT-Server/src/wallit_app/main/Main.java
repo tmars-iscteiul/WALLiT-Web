@@ -1,23 +1,9 @@
 package wallit_app.main;
 
-import java.io.IOException;
-import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.Queue;
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
-
-import com.google.gson.JsonIOException;
-import com.google.gson.JsonSyntaxException;
-
-import wallit_app.data.FundInfoEntry;
-import wallit_app.utilities.JsonHandler;
-import wallit_app.utilities.TimeScaleType;
 
 
 @SpringBootApplication

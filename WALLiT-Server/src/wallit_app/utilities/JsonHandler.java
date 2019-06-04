@@ -49,6 +49,7 @@ public class JsonHandler {
         writer.close();
 	}
 	
+	// Returns an arraylist of FundInfoEntries, based on a timescale
 	public static ArrayList<FundInfoEntry> getTimescaledFundInfoList(TimeScaleType timescale) throws JsonIOException, JsonSyntaxException, FileNotFoundException	{
 		// Reads the current data file, transforming it into a FundInfoEntry ArrayList object
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -67,6 +68,15 @@ public class JsonHandler {
 			res.add(aux.get(aux.size()-1-i));
 		}
 		return res;
+	}
+	
+	// Returns the last balance on the fund info file
+	public static double getLastFundInfoEntryValue() throws JsonIOException, JsonSyntaxException, FileNotFoundException	{
+		// Reads the current data file, transforming it into a FundInfoEntry ArrayList object
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		ArrayList<FundInfoEntry> listFromFile = gson.fromJson(new FileReader("./fundinfo_data.json"), new TypeToken<ArrayList<FundInfoEntry>>(){}.getType());
+		
+		return listFromFile.get(listFromFile.size()-1).getValue();
 	}
 	
 }

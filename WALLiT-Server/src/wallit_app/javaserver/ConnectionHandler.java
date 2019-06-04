@@ -19,11 +19,15 @@ import java.util.Queue;
 import java.util.Random;
 import java.util.Scanner;
 
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonSyntaxException;
+
 import wallit_app.data.AckMessage;
 import wallit_app.data.FundInfoEntry;
 import wallit_app.data.FundInfoEntryChunk;
 import wallit_app.data.MovementEntry;
 import wallit_app.data.MovementEntryChunk;
+import wallit_app.utilities.JsonHandler;
 import wallit_app.utilities.TimeScaleType;
 
 
@@ -202,51 +206,67 @@ public class ConnectionHandler extends Thread {
 	}
 	
 	private boolean deposit(String username, double valueToDeposit) {
-		double balance = getUpdatedBalanceByUser(username);
+		// Updates the user's movement data file
+		double currentUserBalance = getUpdatedBalanceByUser(username);
 		PrintWriter pw;
 		try {
 			pw = new PrintWriter(new FileWriter(USER_MOVEMENTS_LOCATION + username + ".txt", true));
-			balance += valueToDeposit;
-			String s = new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + "," + valueToDeposit + "," + balance;
+			currentUserBalance += valueToDeposit;
+			String s = new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + "," + valueToDeposit + "," + currentUserBalance;
 			pw.println();
 			pw.print(s);
 			pw.close();
-			return true;
 		} 	catch (FileNotFoundException e) {
 			e.printStackTrace();
+			return false;
 		}	catch (IOException e) {
 			e.printStackTrace();
+			return false;
 		}
-		return false;
-		/*
-		 * TODO Catarina, update json with deposit data
-		 */
+		
+		// Updates the main fund data file
+		try {
+			double currentFundValue = JsonHandler.getLastFundInfoEntryValue();
+			JsonHandler.addEntryToFundInfoDataFile(new FundInfoEntry(currentFundValue + valueToDeposit));
+		} catch (JsonIOException | JsonSyntaxException | IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
 	}
 	
 	private boolean withdraw(String username, double valueToWithdraw) {
-		double balance = getUpdatedBalanceByUser(username);
-		if(balance < valueToWithdraw)	{	// If the user doesn't have enough balance to withdraw
+		double currentUserBalance = getUpdatedBalanceByUser(username);
+		if(currentUserBalance < valueToWithdraw)	{	// If the user doesn't have enough balance to withdraw
 			return false;
 		}
+		// Updates the user's movement data file
 		PrintWriter pw;
 		try {
 			pw = new PrintWriter(new FileWriter(USER_MOVEMENTS_LOCATION + username + ".txt", true));
-			balance -= valueToWithdraw;
-			String s = new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + "," + -valueToWithdraw + "," + balance;
+			currentUserBalance -= valueToWithdraw;
+			String s = new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + "," + -valueToWithdraw + "," + currentUserBalance;
 			pw.println();
 			pw.print(s);
 			pw.close();
-			return true;
 		} 	catch (FileNotFoundException e) {
 			e.printStackTrace();
+			return false;
 		}	catch (IOException e) {
 			e.printStackTrace();
+			return false;
 		}
-		return false;
 		
-		/*
-		 * TODO Catarina, update json with withdraw data
-		 */
+		// Updates the main fund data file
+		try {
+			double currentFundValue = JsonHandler.getLastFundInfoEntryValue();
+			JsonHandler.addEntryToFundInfoDataFile(new FundInfoEntry(currentFundValue - valueToWithdraw));
+		} catch (JsonIOException | JsonSyntaxException | IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+		
 	}
 	
 	private void disconnect()	{
