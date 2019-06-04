@@ -101,14 +101,12 @@ public class ConnectionHandler extends Thread {
 			consolePrint(username + " authenticated.");
 			break;
 		case "REQUEST_DEPOSIT":
-			consolePrint(receivedArgs[1] + " wants to deposit: " + receivedArgs[2]);
 			if(deposit(username, Double.parseDouble(receivedArgs[2])))	
 				messageToSend = new AckMessage("MSG_ACK_POSITIVE", null);
 			else
 				messageToSend = new AckMessage("MSG_ACK_NEGATIVE", null);
 			break;
 		case "REQUEST_WITHDRAW":
-			consolePrint(receivedArgs[1] + " wants to withdraw: " + receivedArgs[2]);
 			if(withdraw(username, Double.parseDouble(receivedArgs[2])))	
 				messageToSend = new AckMessage("MSG_ACK_POSITIVE", null);
 			else
@@ -126,7 +124,7 @@ public class ConnectionHandler extends Thread {
 
 	private double getUpdatedBalanceByUser(String username)	{
 		try {
-			ArrayList<MovementEntry> aux = JsonHandler.getMovementEntryListFromUser(username);
+			ArrayList<MovementEntry> aux = JsonHandler.getMovementEntryListFromUser(username, true);
 			if(aux.isEmpty())
 				return 0;
 			return aux.get(0).getBalance();
@@ -139,7 +137,7 @@ public class ConnectionHandler extends Thread {
 	private ArrayList<MovementEntryChunk> getMovementEntriesByUser(String username)	{
 		try {
 			ArrayList<MovementEntryChunk> res = new ArrayList<MovementEntryChunk>();
-			ArrayList<MovementEntry> userMovementList = JsonHandler.getMovementEntryListFromUser(username);
+			ArrayList<MovementEntry> userMovementList = JsonHandler.getMovementEntryListFromUser(username, true);
 			MovementEntryChunk aux = new MovementEntryChunk();
 			for(int i = 0; i < userMovementList.size(); i++)	{
 				if(!aux.addMovementEntry(userMovementList.get(i))) {	// If list is full
@@ -174,7 +172,9 @@ public class ConnectionHandler extends Thread {
 	private boolean deposit(String username, double valueToDeposit) {
 		// Updates the user's movement data file
 		try {
-			JsonHandler.addMovementToUserMovementListFile(valueToDeposit, username);
+			if(!JsonHandler.addMovementToUserMovementListFile(valueToDeposit, username))	{
+				return false;
+			}
 		} catch (JsonIOException | JsonSyntaxException | IOException e1) {
 			e1.printStackTrace();
 			return false;
@@ -193,7 +193,9 @@ public class ConnectionHandler extends Thread {
 	
 	private boolean withdraw(String username, double valueToWithdraw) {
 		try {
-			JsonHandler.addMovementToUserMovementListFile(-valueToWithdraw, username);
+			if(!JsonHandler.addMovementToUserMovementListFile(-valueToWithdraw, username))	{
+				return false;
+			}
 		} catch (JsonIOException | JsonSyntaxException | IOException e1) {
 			e1.printStackTrace();
 			return false;

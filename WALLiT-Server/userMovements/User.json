@@ -1,0 +1,42 @@
+[
+  {
+    "date": "Jun 1, 2019 10:49:35 PM",
+    "amount": 1000.0,
+    "balance": 1000.0
+  },
+  {
+    "date": "Jun 2, 2019 10:51:54 PM",
+    "amount": 1000.0,
+    "balance": 2000.0
+  },
+  {
+    "date": "Jun 3, 2019 11:03:26 PM",
+    "amount": -500.0,
+    "balance": 1500.0
+  },
+  {
+    "date": "Jun 4, 2019 11:04:26 PM",
+    "amount": -500.0,
+    "balance": 1000.0
+  },
+  {
+    "date": "Jun 4, 2019 11:04:36 PM",
+    "amount": 1000.0,
+    "balance": 2000.0
+  },
+  {
+    "date": "Jun 4, 2019 11:04:44 PM",
+    "amount": -2000.0,
+    "balance": 0.0
+  },
+  {
+    "date": "Jun 4, 2019 11:07:18 PM",
+    "amount": 200.0,
+    "balance": 200.0
+  },
+  {
+    "date": "Jun 4, 2019 11:07:26 PM",
+    "amount": -200.0,
+    "balance": 0.0
+  }
+]

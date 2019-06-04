@@ -85,15 +85,19 @@ public class JsonHandler {
 	}
 	
 	//
-	public static void addMovementToUserMovementListFile(double valueToAdd, String username) throws JsonIOException, JsonSyntaxException, IOException	{
+	public static boolean addMovementToUserMovementListFile(double valueToAdd, String username) throws JsonIOException, JsonSyntaxException, IOException	{
 		// Reads the current data file, transforming it into a MovementEntry ArrayList object
-		ArrayList<MovementEntry> aux = getMovementEntryListFromUser(username);
+		ArrayList<MovementEntry> aux = getMovementEntryListFromUser(username, false);
 		
 		// Adds a new entry to the list
 		double currentUserBalance = 0;
 		if(!aux.isEmpty())
 			currentUserBalance = aux.get(aux.size()-1).getBalance();
+		
 		currentUserBalance += valueToAdd;
+		if(currentUserBalance < 0)	{
+			return false;
+		}
 		aux.add(new MovementEntry(valueToAdd, currentUserBalance));
 		
 		// Updates the data file
@@ -102,10 +106,11 @@ public class JsonHandler {
 		gson.toJson(aux, writer);
 		writer.flush();
         writer.close();
+        return true;
 	}
 	
 	//
-	public static ArrayList<MovementEntry> getMovementEntryListFromUser(String username) throws JsonIOException, JsonSyntaxException, IOException	{
+	public static ArrayList<MovementEntry> getMovementEntryListFromUser(String username, boolean invertList) throws JsonIOException, JsonSyntaxException, IOException	{
 		// Reads the current data file, transforming it into a MovementEntry ArrayList object
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		File f = new File(USER_MOVEMENTS_LOCATION + username + ".json");
@@ -117,11 +122,14 @@ public class JsonHandler {
 		}
 		ArrayList<MovementEntry> listFromFile = gson.fromJson(new FileReader(USER_MOVEMENTS_LOCATION + username + ".json"), new TypeToken<ArrayList<MovementEntry>>(){}.getType());
 		
+		if(!invertList)
+			return listFromFile;
 		// Inverts the list to sent, since the read operation is inverted
 		ArrayList<MovementEntry> res = new ArrayList<>();
 		for(int i = 0; i < listFromFile.size(); i++)	{
 			res.add(listFromFile.get(listFromFile.size()-1-i));
 		}
+		
 		
 		return res;
 	}
