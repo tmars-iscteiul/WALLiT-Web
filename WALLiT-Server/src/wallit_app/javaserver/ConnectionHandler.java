@@ -137,7 +137,7 @@ public class ConnectionHandler extends Thread {
 		}
 		while(s.hasNextLine())	{
 			String nextLine = s.nextLine();
-			if(!nextLine.startsWith("#"))	{	// If is not a comment
+			if(!nextLine.startsWith("#") && !nextLine.isEmpty())	{	// If is not a comment
 				lastValue = Double.parseDouble(nextLine.split(",")[2]);
 			}
 		}
@@ -201,8 +201,7 @@ public class ConnectionHandler extends Thread {
 			pw = new PrintWriter(new FileWriter(USER_MOVEMENTS_LOCATION + username + ".txt", true));
 			currentUserBalance += valueToDeposit;
 			String s = new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + "," + valueToDeposit + "," + currentUserBalance;
-			pw.println();
-			pw.print(s);
+			pw.println(s);
 			pw.close();
 		} 	catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -234,8 +233,7 @@ public class ConnectionHandler extends Thread {
 			pw = new PrintWriter(new FileWriter(USER_MOVEMENTS_LOCATION + username + ".txt", true));
 			currentUserBalance -= valueToWithdraw;
 			String s = new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + "," + -valueToWithdraw + "," + currentUserBalance;
-			pw.println();
-			pw.print(s);
+			pw.println(s);
 			pw.close();
 		} 	catch (FileNotFoundException e) {
 			e.printStackTrace();
