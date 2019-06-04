@@ -1,22 +1,33 @@
 package wallit_app.data;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class FundInfoEntry implements Serializable	{
 
 	private static final long serialVersionUID = 4L;
 	
-	private Date date;
-	private double value;
+	@JsonProperty("date")private Date date;
+	@JsonProperty("value")private double value;
 	
 	public FundInfoEntry(Date date, double value)	{
 		this.date = date;
 		this.value = value;
 	}
 	
-	// TODO Add a constructor that generates date from a string.
-	// TODO See how we can store a variable of type java.util.Date on a JSON (If we can just store it and load it afterwards directly)
+	// Constructor to initialize an object, with a String for the date
+	public FundInfoEntry(String date, double value)	{
+		try {
+			this.date = new SimpleDateFormat("yyyy-MM-dd").parse(date);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		this.value = value;
+	}
 	
 	// Constructor to add a value, setting the associated date to today
 	public FundInfoEntry(double value)	{

@@ -42,7 +42,7 @@ public class ConnectionHandler extends Thread {
 	
 	private JavaServer javaServer;
 	
-	public static final String USER_MOVEMENTS = "./userMovements/";
+	public static final String USER_MOVEMENTS_LOCATION = "./userMovements/";
 	
 	public ConnectionHandler(Socket s, int id, JavaServer javaServer)	{
 		try {
@@ -126,7 +126,7 @@ public class ConnectionHandler extends Thread {
 		Scanner s;
 		double lastValue = 0;
 		try {
-			s = new Scanner(new File(USER_MOVEMENTS + username + ".txt"));
+			s = new Scanner(new File(USER_MOVEMENTS_LOCATION + username + ".txt"));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			return lastValue;
@@ -145,7 +145,7 @@ public class ConnectionHandler extends Thread {
 		Scanner s;
 		LinkedList<String> fileLines = new LinkedList<String>();
 		try {
-			s = new Scanner(new File(USER_MOVEMENTS + username + ".txt"));
+			s = new Scanner(new File(USER_MOVEMENTS_LOCATION + username + ".txt"));
 			while (s.hasNextLine()) {
 				String nextLine = s.nextLine();
 				if(!nextLine.startsWith("#"))	{	// If is not a comment
@@ -205,7 +205,7 @@ public class ConnectionHandler extends Thread {
 		double balance = getUpdatedBalanceByUser(username);
 		PrintWriter pw;
 		try {
-			pw = new PrintWriter(new FileWriter(USER_MOVEMENTS + username + ".txt", true));
+			pw = new PrintWriter(new FileWriter(USER_MOVEMENTS_LOCATION + username + ".txt", true));
 			balance += valueToDeposit;
 			String s = new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + "," + valueToDeposit + "," + balance;
 			pw.println();
@@ -230,7 +230,7 @@ public class ConnectionHandler extends Thread {
 		}
 		PrintWriter pw;
 		try {
-			pw = new PrintWriter(new FileWriter(USER_MOVEMENTS + username + ".txt", true));
+			pw = new PrintWriter(new FileWriter(USER_MOVEMENTS_LOCATION + username + ".txt", true));
 			balance -= valueToWithdraw;
 			String s = new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + "," + -valueToWithdraw + "," + balance;
 			pw.println();
