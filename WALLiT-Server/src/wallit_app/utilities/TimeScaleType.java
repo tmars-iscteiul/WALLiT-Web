@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public enum TimeScaleType implements Serializable	{
 	ONE_MONTH(30, 1), 
-	THREE_MONTHS(90, 1), 
+	THREE_MONTHS(30, 3), 
 	SIX_MONTHS(27, 7), 
 	ONE_YEAR(52, 7),
 	FIVE_YEARS(60, 30), 
