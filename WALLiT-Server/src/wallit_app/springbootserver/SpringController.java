@@ -25,6 +25,7 @@ import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 
 import wallit_app.data.FundInfoEntry;
+import wallit_app.data.MovementEntry;
 import wallit_app.javaserver.JavaServer;
 import wallit_app.utilities.JsonHandler;
 import wallit_app.utilities.TimeScaleType;
@@ -48,6 +49,17 @@ public class SpringController {
 	@RequestMapping("/javaserver_status")
 	public String getConnectedClients()	{
 		return "The java server currently has " + javaServer.getConnectedClients() + " active android client(s).";
+	}
+	
+	@CrossOrigin(origins = "http://localhost:4200")
+	@RequestMapping(method = RequestMethod.POST, value = "/getMovementEntriesFromUser")
+	public ResponseEntity<ArrayList<MovementEntry>> getMovementEntriesFromUser() {
+		try {
+			return ResponseEntity.ok(JsonHandler.getMovementEntryListFromUser("User", true));
+		} catch (JsonIOException | JsonSyntaxException | IOException e) {
+			e.printStackTrace();
+		}
+		return (ResponseEntity<ArrayList<MovementEntry>>) ResponseEntity.notFound();
 	}
 	
 	@CrossOrigin(origins = "http://localhost:4200")
