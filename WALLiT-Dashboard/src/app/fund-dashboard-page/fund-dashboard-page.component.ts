@@ -227,8 +227,6 @@ export class FundDashboardPageComponent implements OnInit {
 	        valuesJSON.push(output.value);    
         });
 
-        var time = ['week'];
-
 		this.chart = new Chart(ctx, {
 		    type: 'line',
 		    data: {

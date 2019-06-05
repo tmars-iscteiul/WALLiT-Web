@@ -5,11 +5,11 @@
 
      	<div class="row" style="padding:10px; display: flex; align-items: center">
             <div class="col-4" style="padding-left:20px; margin-bottom: 12px; color: #676767"><h5>Current value:</h5></div>
-            <div class="col-8 alert alert-success" style="text-align: center" role="alert"><h4>5.672,17 €</h4></div>
+            <div class="col-8 alert alert-success" style="text-align: center" role="alert"><h4 id="currentValue">5.672,17 €</h4></div>
         </div>
         <div class="row" style="padding:10px; display: flex; align-items: center">
             <div class="col-4" style="padding-left:20px; margin-bottom: 12px; color: #676767"><h5>Current &alpha;-level:</h5></div>
-            <div class="col-8 alert alert-danger" style="text-align: center;" role="alert"><h4>- 1,54%</h4></div>
+            <div class="col-8 alert alert-danger" style="text-align: center;" role="alert"><h4 id="currentAlpha">- 1,54%</h4></div>
         </div>
 
         <h5 style="color: #003B6D; padding-top: 10px">Evolution chart</h5>
@@ -70,69 +70,16 @@
 
 		<div style="overflow-y:scroll; height: 416px">
 			<table id="movementsTable" style="table-layout:fixed;">
-			  <tr class="header">
-			    <th>ID</th>
-			    <th>Date</th>
-			    <th>Type</th>
-			    <th>Amount</th>
-			    <th>Balance</th>
-			  </tr>
-			  <tr>
-			  	<td>132766</td>
-			    <td>2019-02-21</td>
-			    <td>Deposit</td>
-			    <td>150,00 €</td>
-			    <td>5.672,17 €</td>
-			  </tr>
-			  <tr>
-		    	<td>128332</td>
-			    <td>2019-01-14</td>
-			    <td>Withdraw</td>
-			    <td>80,00 €</td>
-			    <td>5.492,56 €</td>
-			  </tr>
-			  <tr>
-			  	<td>125189</td>
-			    <td>2018-12-02</td>
-			    <td>Deposit</td>
-			    <td>100,00 €</td>
-			    <td>5.558,16 €</td>
-			  </tr>
-			  <tr>
-			    <td>124362</td>
-			    <td>2018-10-12</td>
-			    <td>Deposit</td>
-			    <td>120,00 €</td>
-			    <td>5.426,36 €</td>
-			  </tr>
-			  <tr>
-			  	<td>121453</td>
-			    <td>2018-08-21</td>
-			    <td>Withdraw</td>
-			    <td>50,00 €</td>
-			    <td>5.398,27 €</td>
-			  </tr>
-			  <tr>
-		    	<td>119896</td>
-			    <td>2018-07-02</td>
-			    <td>Deposit</td>
-			    <td>400,00 €</td>
-			    <td>4.895,46 €</td>
-			  </tr>
-			  <tr>
-			  	<td>117848</td>
-			    <td>2018-06-09</td>
-			    <td>Deposit</td>
-			    <td>200,00 €</td>
-			    <td>4.684,25 €</td>
-			  </tr>
-			  <tr>
-			    <td>115744</td>
-			    <td>2018-04-26</td>
-			    <td>Deposit</td>
-			    <td>4.400,00 €</td>
-			    <td>4.400,00 €</td>
-			  </tr>
+			  <thead>
+			    <tr class="header">
+			      <th>Date</th>
+			      <th>Type</th>
+			      <th>Amount</th>
+			      <th>Balance</th>
+			    </tr>
+			  </thead>
+			  <tbody>
+			  </tbody>
 			</table>
 		</div>
     </div>

@@ -10,7 +10,7 @@ import * as $ from 'jquery';
 })
 export class LoginPageComponent implements OnInit {
 
-  user = "John Doe";
+  user = "User";
   pass = "12345";
   message:string;
 

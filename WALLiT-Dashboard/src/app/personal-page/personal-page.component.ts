@@ -11,12 +11,70 @@ import * as $ from 'jquery';
 export class PersonalPageComponent implements OnInit {
 
   type = null;
+  chart = null;
 
   constructor() { 
+  	
   }
 
   ngOnInit() {
-  	this.updateChart();
+	this.fetchInformationFromUser();
+  }
+
+  fetchInformationFromUser() {
+	fetch('http://localhost:4202/getMovementEntriesFromUser', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/plain-text',
+      },
+      mode: 'cors'
+    })
+    .then((response) => response.json())
+    .then((response) => {
+    	var labelsJSON = [];
+  		var valuesJSON = [];
+		var balance = null;
+		var i = 0;
+
+    	response.forEach( function(output) {
+        	labelsJSON.push(output.date);
+	        valuesJSON.push(output.balance);
+
+			if (balance == null) document.getElementById("currentValue").innerHTML = output.balance + " €";
+
+	        var table = document.getElementById("movementsTable");
+	        var row = document.createElement("tr");
+			row.className = "rowNew";
+			
+
+	        var date = document.createElement("td");
+			date.innerHTML = output.date.substring(0,10);
+			date.className = "columnNew";
+			row.appendChild(date);
+
+			var type = document.createElement("td");
+			if (output.amount < 0) {
+				type.innerHTML = "Withdraw";
+			} else type.innerHTML = "Deposit";
+			type.className = "columnNew";
+			row.appendChild(type);
+
+			var amount = document.createElement("td");
+			amount.innerHTML = output.amount;
+			amount.className = "columnNew";
+			row.appendChild(amount);
+
+			var balance = document.createElement("td");
+			balance.innerHTML = output.balance;
+			balance.className = "columnNew";
+			row.appendChild(balance);
+	        table.appendChild(row);
+	        i++;
+        });
+
+        this.updateChart(labelsJSON, valuesJSON);
+	})
+	  	
   }
 
   clearFilter() {
@@ -100,101 +158,99 @@ export class PersonalPageComponent implements OnInit {
     return new Date(temp.join("-"));
   }
 
-  updateChart() {
+  updateChart(labelsJSON, valuesJSON) {
   	var path = null;
   	var scale = 'sixMonths';
 
-	path = "../assets/dataTestPercentage.json"
-
-	$.getJSON(path, function (data) {
-  		var labelsJSON = [];
-  		var valuesJSON = [];
-
-	    if (data.hasOwnProperty(scale)) {
-    		labelsJSON = Object.keys(data[scale]);
-    		valuesJSON = Object.values(data[scale]);
-	    }
+  	var labelsJSON = labelsJSON;
+  	var valuesJSON = valuesJSON;
 	
-	    var canvas = <HTMLCanvasElement> document.getElementById("chart");
-		var ctx = canvas.getContext("2d");
+    var canvas = <HTMLCanvasElement> document.getElementById("chart");
+	var ctx = canvas.getContext("2d");
 
-		this.chart = new Chart(ctx, {
-		    type: 'line',
-		    data: {
-		        labels: labelsJSON,
-		        datasets: [{
-		            label: 'Alpha value',
-		            data: valuesJSON,
-		            borderWidth: 1,
-		            backgroundColor: '#EBEDF3',
-			        borderColor: '#6699CC',
-			        pointBackgroundColor: '#003B6D',
-			        pointBorderColor: '#FFF',
-			        pointHoverBackgroundColor: '#FFF',
-			        pointHoverBorderColor: '#BDBDBD'
-		        }],
-		    },
-		    options: {
-		        scales: {
-			      xAxes: [
-			      	{
-			    	  type: 'time',
-			                time: {
-			                    unit: 'month'
-			                },
-			    	  gridLines: {
-			    	  	color: '#FFF'
-			    	  },
-			    	  ticks: {
-			            fontColor: '#676767'
-			          }
-			      	}],
-			      yAxes: [
-			        {
-			          id: 'y-axis-0',
-			          position: 'left',
-			          gridLines: {
-			            color: '#FFF',
-			          },
-			          ticks: {
-			            fontColor: '#676767',
-			            min: 90,
-			            max: 120
-			          }
-			        },
-			      ]
-	    		},
-	    		legend: {
-	            	display: false,
-	            },
-	            tooltips: {
-	            	custom: function(tooltip) {
-				        if (!tooltip) return;
-				        // disable displaying the color box;
-				        tooltip.displayColors = false;
-				    },
-		            callbacks: {
-		                title: function(tooltipItems, data) {
-		                    return tooltipItems[0].xLabel.substring(0,10);
+	var chart = new Chart(ctx, {
+	    type: 'line',
+	    data: {
+	        labels: labelsJSON,
+	        datasets: [{
+	            label: 'Fund total value',
+	            data: valuesJSON,
+	            borderWidth: 1,
+	            backgroundColor: '#E9F0C3',
+		        borderColor: '#A7B846',
+		        pointBackgroundColor: '#687328',
+		        pointBorderColor: '#FFF',
+		        pointHoverBackgroundColor: '#FFF',
+		        pointHoverBorderColor: '#BDBDBD'
+	        }],
+	    },
+	    options: {
+	        scales: {
+		      xAxes: [
+		      	{
+		    	  type: 'time',
+		                time: {
+		                    unit: 'day'
+		                },
+		    	  gridLines: {
+		    	  	color: '#FFF'
+		    	  },
+		    	  ticks: {
+		            fontColor: '#676767'
+		          }
+		      	}],
+		      yAxes: [
+		        {
+		          id: 'y-axis-0',
+		          position: 'left',
+		          gridLines: {
+		            color: '#FFF',
+		          },
+		          ticks: {
+		            fontColor: '#676767',
+		            min: 0
+		          }
+		        },
+		      ]
+    		},
+    		legend: {
+            	display: false,
+            },
+            tooltips: {
+            	custom: function(tooltip) {
+			        if (!tooltip) return;
+			        // disable displaying the color box;
+			        tooltip.displayColors = false;
+			    },
+	            callbacks: {
+	                title: function(tooltipItems, data) {
+	                    return tooltipItems[0].xLabel.substring(0,10);
 
-		           		},
-		           		label: function(tooltipItem, data) {
-		           			var label = data.datasets[tooltipItem.datasetIndex].label || '';
+	           		},
+	           		label: function(tooltipItem, data) {
+	           			var label = data.datasets[tooltipItem.datasetIndex].label || '';
 
-		                    if (label) {
-		                        label += ': ';
-		                    }
+	                    if (label) {
+	                        label += ': ';
+	                    }
 
-		                    var num = Math.round(Number(tooltipItem.yLabel)*100)/100;
-		                    label += '' + num.toString();
-		                    return label;
-	                	}
-	            	}
-	        	}
-	        }
-		});
+	                    var num = Math.round(Number(tooltipItem.yLabel)*100)/100;
+	                    label += '' + num.toString();
+	                    return label;
+                	}
+            	}
+        	}
+        }
 
-	    this.chart.update();
-    });
+	});
+		
+	if (scale == "fiveYears") {
+    	this.chart.options.scales.xAxes[0].time.unit='month';
+    } else if (scale == "oneMonth") {
+        this.chart.options.scales.xAxes[0].time.unit='day';
+    }
+
+	this.chart.update();
+    
   }
 }

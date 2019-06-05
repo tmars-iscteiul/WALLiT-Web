@@ -30,3 +30,17 @@
 input[readonly] {
   background-color: white;
 }
+
+.rowNew {
+  border-bottom: 1px solid #ddd; 
+}
+
+#movementsTable .rowNew:hover {
+  background-color: #EBEDF3;
+}
+
+.columnNew {
+  text-align: center;
+  color: red;
+  padding: 6px;
+}
