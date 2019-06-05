@@ -227,9 +227,9 @@ export class FundDashboardPageComponent implements OnInit {
 	        valuesJSON.push(output.value);    
         });
 
-        var timeUnit = 'week';
+        var time = ['week'];
 
-		var chart = new Chart(ctx, {
+		this.chart = new Chart(ctx, {
 		    type: 'line',
 		    data: {
 		        labels: labelsJSON,
@@ -251,7 +251,7 @@ export class FundDashboardPageComponent implements OnInit {
 			      	{
 			    	  type: 'time',
 			                time: {
-			                    unit: timeUnit
+			                    unit: 'week'
 			                },
 			    	  gridLines: {
 			    	  	color: '#FFF'
@@ -304,14 +304,14 @@ export class FundDashboardPageComponent implements OnInit {
 	        }
 		});
 
-//		if (scale == "fiveYears") {
-//	    	chart.options.scales.xAxes[0].time.unit='month';
-//	    } else if (scale == "oneMonth") {
-//	        chart.options.scales.xAxes[0].time.unit='day';
-//	    }
+		if (scale == "fiveYears") {
+	    	this.chart.options.scales.xAxes[0].time.unit='month';
+	    } else if (scale == "oneMonth") {
+	        this.chart.options.scales.xAxes[0].time.unit='day';
+	    }
   
 
-    	chart.update();
+    	this.chart.update();
         
     });
   }
