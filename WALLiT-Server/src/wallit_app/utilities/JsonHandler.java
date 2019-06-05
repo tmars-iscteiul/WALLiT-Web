@@ -84,7 +84,7 @@ public class JsonHandler {
 		return listFromFile.get(listFromFile.size()-1).getValue();
 	}
 	
-	//
+	// Adds an entry to the user's movement file, calculating the final balance using adding the valueToAdd, inserting the current date time-stamp
 	public static boolean addMovementToUserMovementListFile(double valueToAdd, String username) throws JsonIOException, JsonSyntaxException, IOException	{
 		// Reads the current data file, transforming it into a MovementEntry ArrayList object
 		ArrayList<MovementEntry> aux = getMovementEntryListFromUser(username, false);
@@ -93,7 +93,6 @@ public class JsonHandler {
 		double currentUserBalance = 0;
 		if(!aux.isEmpty())
 			currentUserBalance = aux.get(aux.size()-1).getBalance();
-		
 		currentUserBalance += valueToAdd;
 		if(currentUserBalance < 0)	{
 			return false;
@@ -124,12 +123,12 @@ public class JsonHandler {
 		
 		if(!invertList)
 			return listFromFile;
-		// Inverts the list to sent, since the read operation is inverted
+		// Inverts the list to sent, if called by the input. It will revert the list if its a final call. 
+		// For example, when addMovementToUserMovementListFile(...) calls this method to add a new entry, it doesn't need to invert the list.
 		ArrayList<MovementEntry> res = new ArrayList<>();
 		for(int i = 0; i < listFromFile.size(); i++)	{
 			res.add(listFromFile.get(listFromFile.size()-1-i));
 		}
-		
 		
 		return res;
 	}

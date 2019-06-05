@@ -91,27 +91,32 @@ public class ConnectionHandler extends Thread {
 		case "REQUEST_MOVEMENT_HISTORY":
 			 messageToSend = new AckMessage("MSG_ACK_USER_DATA", getMovementEntriesByUser(receivedArgs[1]));
 			break;
+			
 		case "REQUEST_FUND_INFO":
 			messageToSend = new AckMessage("MSG_ACK_FUND_DATA", getFundInfoEntryChunks());
 			break;
+			
 		case "REQUEST_LOGIN":
 			// Logs in any user (for now)
 			messageToSend = new AckMessage("MSG_ACK_POSITIVE", getUpdatedBalanceByUser(receivedArgs[1]));
 			username = receivedArgs[1];
 			consolePrint(username + " authenticated.");
 			break;
+			
 		case "REQUEST_DEPOSIT":
 			if(deposit(username, Double.parseDouble(receivedArgs[2])))	
 				messageToSend = new AckMessage("MSG_ACK_POSITIVE", null);
 			else
 				messageToSend = new AckMessage("MSG_ACK_NEGATIVE", null);
 			break;
+			
 		case "REQUEST_WITHDRAW":
 			if(withdraw(username, Double.parseDouble(receivedArgs[2])))	
 				messageToSend = new AckMessage("MSG_ACK_POSITIVE", null);
 			else
 				messageToSend = new AckMessage("MSG_ACK_NEGATIVE", null);
 			break;
+			
 		default:
 			// Denies any other request
 			messageToSend = new AckMessage("MSG_ACK_NEGATIVE", null);
@@ -192,6 +197,7 @@ public class ConnectionHandler extends Thread {
 	}
 	
 	private boolean withdraw(String username, double valueToWithdraw) {
+		// Updates the user's movement data file
 		try {
 			if(!JsonHandler.addMovementToUserMovementListFile(-valueToWithdraw, username))	{
 				return false;
