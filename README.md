@@ -12,3 +12,9 @@ Open a commandline and go to the path ./WALLiT-Web/WALLiT-Dashboard/.
 Type "npm install" and wait for the finish of the installation.
 
 After the installation, type "ng serve --open", the command will open your browser and go to: http://localhost:4200
+
+### Note
+To access and test the client area on the website, you must use the following credentials:
+
+Username: "User"
+Passoword: "12345"
