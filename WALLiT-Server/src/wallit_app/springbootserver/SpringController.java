@@ -50,6 +50,7 @@ public class SpringController {
 		return "The java server currently has " + javaServer.getConnectedClients() + " active android client(s).";
 	}
 	
+	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(method = RequestMethod.POST, value = "/getFundEntries1Month")
 	public ResponseEntity<ArrayList<FundInfoEntry>> getFundEntries1Month() {
 		try {
@@ -60,6 +61,7 @@ public class SpringController {
 		return (ResponseEntity<ArrayList<FundInfoEntry>>) ResponseEntity.notFound();
 	}
 	
+	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(method = RequestMethod.POST, value = "/getFundEntries3Months")
 	public ResponseEntity<ArrayList<FundInfoEntry>> getFundEntries3Months() {
 		try {
@@ -70,6 +72,7 @@ public class SpringController {
 		return (ResponseEntity<ArrayList<FundInfoEntry>>) ResponseEntity.notFound();
 	}
 	
+	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(method = RequestMethod.POST, value = "/getFundEntries6Months")
 	public ResponseEntity<ArrayList<FundInfoEntry>> getFundEntries6Months() {
 		try {
@@ -80,6 +83,7 @@ public class SpringController {
 		return (ResponseEntity<ArrayList<FundInfoEntry>>) ResponseEntity.notFound();
 	}
 	
+	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(method = RequestMethod.POST, value = "/getFundEntries1Year")
 	public ResponseEntity<ArrayList<FundInfoEntry>> getFundEntries1Year() {
 		try {
@@ -90,6 +94,7 @@ public class SpringController {
 		return (ResponseEntity<ArrayList<FundInfoEntry>>) ResponseEntity.notFound();
 	}
 	
+	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(method = RequestMethod.POST, value = "/getFundEntries5Years")
 	public ResponseEntity<ArrayList<FundInfoEntry>> getFundEntries5Years() {
 		try {
