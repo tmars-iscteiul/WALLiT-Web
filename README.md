@@ -17,4 +17,5 @@ After the installation, type "ng serve --open", the command will open your brows
 To access and test the client area on the website, you must use the following credentials:
 
 Username: "User"
-Passoword: "12345"
+
+Password: "12345"
