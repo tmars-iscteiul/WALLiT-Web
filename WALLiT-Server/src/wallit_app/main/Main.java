@@ -5,7 +5,14 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
+import wallit_app.springbootserver.SpringController;
 
+/**
+ * Runs spring boot's service
+ * @see SpringController
+ * @author skner
+ *
+ */
 @SpringBootApplication
 @ComponentScan(basePackages={"wallit_app"})
 public class Main {

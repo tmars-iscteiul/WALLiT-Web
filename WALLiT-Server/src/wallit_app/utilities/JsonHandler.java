@@ -6,12 +6,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
-import java.text.SimpleDateFormat;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonIOException;
@@ -21,6 +18,11 @@ import com.google.gson.reflect.TypeToken;
 import wallit_app.data.FundInfoEntry;
 import wallit_app.data.MovementEntry;
 
+/**
+ * A mainly static class, to handle all read/write operations made with JSON files. This will include in writing {@link FundInfoEntry} and {@link MovementEntry} lists.
+ * @author skner
+ *
+ */
 public class JsonHandler {
 	
 	public static final String USER_MOVEMENTS_LOCATION = "./userMovements/";

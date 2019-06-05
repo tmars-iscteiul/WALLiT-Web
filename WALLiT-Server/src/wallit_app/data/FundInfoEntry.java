@@ -7,6 +7,12 @@ import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * A data class, containing a value associated with a date object.
+ * @see FundInfoEntryChunk
+ * @author skner
+ *
+ */
 public class FundInfoEntry implements Serializable	{
 
 	private static final long serialVersionUID = 4L;

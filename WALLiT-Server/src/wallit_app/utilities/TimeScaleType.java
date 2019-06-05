@@ -2,6 +2,17 @@ package wallit_app.utilities;
 
 import java.io.Serializable;
 
+import wallit_app.data.FundInfoEntry;
+import wallit_app.data.FundInfoEntryChunk;
+
+/**
+ * An enum that will hold each available TimeScaleType for the {@link FundInfoEntry} lists that are sent to the android client.
+ * <p>
+ * Each one has two different static and final values associated with it. The first is {@link TimeScaleType#entriesPerScale} and the second is {@link TimeScaleType#jumpsPerLine} 
+ * @see FundInfoEntryChunk
+ * @author skner
+ *
+ */
 public enum TimeScaleType implements Serializable	{
 	ONE_MONTH(30, 1), 
 	THREE_MONTHS(30, 3), 
@@ -10,9 +21,9 @@ public enum TimeScaleType implements Serializable	{
 	FIVE_YEARS(60, 30), 
 	;
 	
-	// Number of entries per perspective. This is useful to guarantee consistency between how many entries should be inserted per time scale on each chunk.
+	/** Number of entries per perspective. This is useful to guarantee consistency between how many entries should be inserted per time scale on each chunk.*/
 	private int entriesPerScale;
-	// How many lines does it jump from the original data file. This will be used to determine the interval in between data entries in the timescaled list.
+	/** How many lines does it jump from the original data file. This will be used to determine the interval in between data entries in the timescaled list.*/
 	private int jumpsPerLine;
 	
 	TimeScaleType(int entriesPerScale, int jumpsPerLine) {

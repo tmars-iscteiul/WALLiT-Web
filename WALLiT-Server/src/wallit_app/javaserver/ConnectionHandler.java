@@ -1,24 +1,11 @@
 package wallit_app.javaserver;
 
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
 import java.net.Socket;
-import java.net.SocketException;
-import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Random;
-import java.util.Scanner;
-
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 
@@ -32,6 +19,8 @@ import wallit_app.utilities.TimeScaleType;
 
 
 /**
+ * This class will serve as the client's connection handler. Will serve as a thread listening to android client requests, handling any responses that may be sent.
+ * @see JavaServer
  * @author skner
  *
  */

@@ -12,6 +12,8 @@ import wallit_app.main.Main;
 
 
 /**
+ * The java server will serve as an initial connection establishing access point to android clients. 
+ * For every client wanting to connect, it will instantiate and run a thread of {@link ConnectionHandler}, that will handle its socket.
  * @author skner
  *
  */
@@ -21,7 +23,6 @@ public class JavaServer extends Thread	{
 
 	private ServerSocket serverSocket;
 	private ArrayList<ConnectionHandler> connectedClients;
-	// TODO Remove disconnected clients from list, clear resource space
 	private boolean running;
 	
 	public JavaServer()	{
