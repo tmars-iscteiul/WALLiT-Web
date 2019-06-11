@@ -33,43 +33,10 @@ export class PersonalPageComponent implements OnInit {
     .then((response) => {
     	var labelsJSON = [];
   		var valuesJSON = [];
-		var balance = null;
-		var i = 0;
 
     	response.forEach( function(output) {
         	labelsJSON.push(output.date);
 	        valuesJSON.push(output.balance);
-
-			if (balance == null) document.getElementById("currentValue").innerHTML = output.balance + " €";
-
-	        var table = document.getElementById("movementsTable");
-	        var row = document.createElement("tr");
-			row.className = "rowNew";
-			
-
-	        var date = document.createElement("td");
-			date.innerHTML = output.date.substring(0,10);
-			date.className = "columnNew";
-			row.appendChild(date);
-
-			var type = document.createElement("td");
-			if (output.amount < 0) {
-				type.innerHTML = "Withdraw";
-			} else type.innerHTML = "Deposit";
-			type.className = "columnNew";
-			row.appendChild(type);
-
-			var amount = document.createElement("td");
-			amount.innerHTML = output.amount;
-			amount.className = "columnNew";
-			row.appendChild(amount);
-
-			var balance = document.createElement("td");
-			balance.innerHTML = output.balance;
-			balance.className = "columnNew";
-			row.appendChild(balance);
-	        table.appendChild(row);
-	        i++;
         });
 
         this.updateChart(labelsJSON, valuesJSON);
@@ -131,8 +98,8 @@ export class PersonalPageComponent implements OnInit {
   	}
 	  	 
 	for (i = 0; i < tr.length; i++) {
-	  	tdDate = tr[i].getElementsByTagName("td")[1];
-	    tdType = tr[i].getElementsByTagName("td")[2];
+	  	tdDate = tr[i].getElementsByTagName("td")[0];
+	    tdType = tr[i].getElementsByTagName("td")[1];
 	    if (tdDate && tdType) {
 	      if (tdType.textContent == type || type == "All") {
 	      	if (this.stringToDate(tdDate.textContent).getTime() > startDate.getTime() && this.stringToDate(tdDate.textContent).getTime() < endDate.getTime()) {
@@ -173,7 +140,7 @@ export class PersonalPageComponent implements OnInit {
 	    data: {
 	        labels: labelsJSON,
 	        datasets: [{
-	            label: 'Fund total value',
+	            label: 'Balance',
 	            data: valuesJSON,
 	            borderWidth: 1,
 	            backgroundColor: '#E9F0C3',
@@ -190,7 +157,7 @@ export class PersonalPageComponent implements OnInit {
 		      	{
 		    	  type: 'time',
 		                time: {
-		                    unit: 'day'
+		                    unit: 'week'
 		                },
 		    	  gridLines: {
 		    	  	color: '#FFF'
@@ -243,14 +210,6 @@ export class PersonalPageComponent implements OnInit {
         }
 
 	});
-		
-	if (scale == "fiveYears") {
-    	this.chart.options.scales.xAxes[0].time.unit='month';
-    } else if (scale == "oneMonth") {
-        this.chart.options.scales.xAxes[0].time.unit='day';
-    }
-
-	this.chart.update();
     
   }
 }

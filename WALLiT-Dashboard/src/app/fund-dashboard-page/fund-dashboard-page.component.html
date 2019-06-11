@@ -1,5 +1,5 @@
 <div>
-  <span><h2 style="text-align: center; color: #003B6D; margin-top: 20px; margin-bottom: 20px">
+  <span><h2 style="text-align: center; color: #003B6D; margin-top: 40px; margin-bottom: 20px">
     The Fund Evolution</h2>
   </span>
 </div>
@@ -12,22 +12,22 @@
 
 <div class="container-fluid">
   <div class="row">
-    <div class="col-10">
+    <div class="col-9">
       <div class="chartBox" style="display: block">
-        <canvas id="chart" height="120"></canvas>
+        <canvas id="chart" height="180"></canvas>
       </div>
     </div>
 
-    <div class="col col-lg-2">
+    <div class="col col-lg-3">
       <div class="card">
         <div class="card-body">
           <h6 class="card-subtitle mb-2 text-muted">Date scale</h6>
           <div>
-            <button id="fiveYears" class="btn btn-outline-secondary btn-sm btn-block" (click)="updateTimeScale('fiveYears')">5 years</button>
-            <button id="oneYear" class="btn btn-outline-secondary btn-sm btn-block" (click)="updateTimeScale('oneYear')">1 year</button>
-            <button id="sixMonths" class="btn btn-outline-secondary btn-sm btn-block" (click)="updateTimeScale('sixMonths')">6 months</button>
-            <button id="threeMonths" class="btn btn-outline-secondary btn-sm btn-block" (click)="updateTimeScale('threeMonths')">3 months</button>
-            <button id="oneMonth" class="btn btn-outline-secondary btn-sm btn-block" (click)="updateTimeScale('oneMonth')">1 month</button>
+            <button style="margin-top: 10px" id="fiveYears" class="btn btn-outline-secondary btn-sm btn-block" (click)="updateTimeScale('fiveYears')">5 years</button>
+            <button style="margin-top: 10px" id="oneYear" class="btn btn-outline-secondary btn-sm btn-block" (click)="updateTimeScale('oneYear')">1 year</button>
+            <button style="margin-top: 10px" id="sixMonths" class="btn btn-outline-secondary btn-sm btn-block" (click)="updateTimeScale('sixMonths')">6 months</button>
+            <button style="margin-top: 10px" id="threeMonths" class="btn btn-outline-secondary btn-sm btn-block" (click)="updateTimeScale('threeMonths')">3 months</button>
+            <button style="margin-top: 10px" id="oneMonth" class="btn btn-outline-secondary btn-sm btn-block" (click)="updateTimeScale('oneMonth')">1 month</button>
 
             <div class="btn-group btn-group-sm btn-block" role="group" aria-label="Basic example">
               <button id="percentage" type="button" class="btn btn-outline-secondary btn-sm" (click)="updateChartType('percentage')">%</button>
@@ -35,7 +35,7 @@
             </div>
           </div>
 
-          <h6 class="mb-2 text-muted" style="margin-top: 20px">Current status</h6>
+          <h6 class="mb-2 text-muted" style="margin-top: 60px">Current status</h6>
 
           <div class="row">
             <div class="col">Value:</div>

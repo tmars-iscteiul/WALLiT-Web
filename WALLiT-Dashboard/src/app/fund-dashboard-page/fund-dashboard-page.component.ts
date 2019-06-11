@@ -74,7 +74,7 @@ export class FundDashboardPageComponent implements OnInit {
   	this.scale = scale;
 
   	$("canvas").remove();
-	$(".chartBox").append('<canvas id="chart" height="120"></canvas>');
+	$(".chartBox").append('<canvas id="chart" height="180"></canvas>');
 
 	if (this.type == "percentage") {
 		this.buildPercentageChart();
