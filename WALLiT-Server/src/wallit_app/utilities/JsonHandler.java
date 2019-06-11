@@ -35,7 +35,6 @@ public class JsonHandler {
 		ArrayList<FundInfoEntry> aux = gson.fromJson(new FileReader(FUND_INFO_LOCATION), new TypeToken<ArrayList<FundInfoEntry>>(){}.getType());
 		
 		// Calculates the number of days between the last entry and the current date
-		System.out.println(aux.get(aux.size()-1));
 		long noOfDaysBetween = ChronoUnit.DAYS.between(aux.get(aux.size()-1).getDate().toInstant(), entryToAdd.getDate().toInstant());
 		
 		// Fills fund info list with missing entries until the current date
@@ -110,7 +109,7 @@ public class JsonHandler {
         return true;
 	}
 	
-	//
+	// Returns a movement entry list by username
 	public static ArrayList<MovementEntry> getMovementEntryListFromUser(String username, boolean invertList) throws JsonIOException, JsonSyntaxException, IOException	{
 		// Reads the current data file, transforming it into a MovementEntry ArrayList object
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -135,6 +134,30 @@ public class JsonHandler {
 		return res;
 	}
 	
+	// Returns a movement entry list by username, grouping entries if they occurred in the same day
+	public static ArrayList<MovementEntry> getGroupedMovementEntryListByDay(String username, boolean invertList) throws JsonIOException, JsonSyntaxException, IOException	{
+		// Gets the raw user movement entry list
+		ArrayList<MovementEntry> listFromFile = getMovementEntryListFromUser(username, invertList);
+		MovementEntry dateCheckerAux = listFromFile.get(0);
+		ArrayList<MovementEntry> res = new ArrayList<>();
+		res.add(dateCheckerAux);	// Adds the first entry, and starts comparing from there
+		
+		// Compares for each entry if it has repetitive days (Assuming the original list is ordered)
+		for(int i = 1; i < listFromFile.size(); i++)	{
+			long numberOfDays = ChronoUnit.DAYS.between(listFromFile.get(i).getDate().toInstant(), dateCheckerAux.getDate().toInstant());
+			System.out.println(numberOfDays);
+			if(numberOfDays == 0)	{
+				// If they have the same date: group them in one entry
+				res.remove(dateCheckerAux);
+				dateCheckerAux = new MovementEntry(dateCheckerAux.getDate(), dateCheckerAux.getAmount() + listFromFile.get(i).getAmount(), dateCheckerAux.getBalance());
+			}	else	{
+				// If not, add the entry normally
+				dateCheckerAux = listFromFile.get(i);
+			}
+			res.add(dateCheckerAux);
+		}
+		return res;
+	}
 	
 	
 }

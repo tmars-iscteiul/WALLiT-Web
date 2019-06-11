@@ -56,6 +56,21 @@ public class SpringController {
 	}
 	
 	/**
+	 * @return A {@link ResponseEntity} containing a {@link MovementEntry} list from the requested user, filtered and grouped by day.
+	 */
+	@SuppressWarnings("unchecked")
+	@CrossOrigin(origins = "http://localhost:4200")
+	@RequestMapping(method = RequestMethod.POST, value = "/getMovementEntriesFromUserByDay")
+	public ResponseEntity<ArrayList<MovementEntry>> getMovementEntriesFromUserByDay() {
+		try {
+			return ResponseEntity.ok(JsonHandler.getGroupedMovementEntryListByDay("User", true));
+		} catch (JsonIOException | JsonSyntaxException | IOException e) {
+			e.printStackTrace();
+		}
+		return (ResponseEntity<ArrayList<MovementEntry>>) ResponseEntity.notFound();
+	}
+	
+	/**
 	 * @return A {@link ResponseEntity} containing a {@link FundInfoEntry} list with the {@link TimeScaleType#ONE_MONTH}
 	 */
 	@SuppressWarnings("unchecked")
